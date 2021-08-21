@@ -35,7 +35,8 @@ Begin VB.Form frmAbout
       Width           =   495
    End
    Begin VB.Label Label3 
-      Caption         =   "Label1"
+      BackStyle       =   0  'Transparent
+      Caption         =   "CheckUpdate"
       BeginProperty Font 
          Name            =   "Î¢ÈíÑÅºÚ"
          Size            =   10.5
@@ -53,7 +54,8 @@ Begin VB.Form frmAbout
       Width           =   4815
    End
    Begin VB.Label Label2 
-      Caption         =   "Label1"
+      BackStyle       =   0  'Transparent
+      Caption         =   "OpenSMMWECloudWebsite"
       BeginProperty Font 
          Name            =   "Î¢ÈíÑÅºÚ"
          Size            =   10.5
@@ -71,7 +73,8 @@ Begin VB.Form frmAbout
       Width           =   4815
    End
    Begin VB.Label Label1 
-      Caption         =   "Label1"
+      BackStyle       =   0  'Transparent
+      Caption         =   "AboutText"
       BeginProperty Font 
          Name            =   "Î¢ÈíÑÅºÚ"
          Size            =   10.5
@@ -81,6 +84,7 @@ Begin VB.Form frmAbout
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      ForeColor       =   &H00000000&
       Height          =   1215
       Left            =   840
       TabIndex        =   0
@@ -95,7 +99,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
 frmAbout.Caption = Form1.AboutButton.Caption
-Label1.Caption = Title & vbCrLf & "V" & Version & vbCrLf & "By ÊÇÒ»µ¶Õ¶ßÕ"
+If Locale = "zh-cn" Then
+Label1.Caption = Replace(Title, Version, "") & vbCrLf & "V" & Version & vbCrLf & "By ÊÇÒ»µ¶Õ¶ßÕ"
+Else
+Label1.Caption = Replace(Title, Version, "") & vbCrLf & "V" & Version & vbCrLf & "By YidaozhanYa"
+End If
 Label2.Caption = ErrorText(28)
 Label3.Caption = ErrorText(29)
 End Sub
@@ -105,6 +113,13 @@ Shell "cmd /c start https://cloud.smmwe.ml/", vbMinimizedNoFocus
 End Sub
 
 Private Sub Label3_Click()
-
+If Locale = "zh-cn" Then
+Shell "cmd /c start https://hub.fastgit.org/YidaozhanYa/SMMWECloudLevelManager/releases/latest", vbMinimizedNoFocus
+Else
 Shell "cmd /c start https://github.com/YidaozhanYa/SMMWECloudLevelManager/releases/latest", vbMinimizedNoFocus
+End If
+End Sub
+
+Private Sub Picture2_Click()
+
 End Sub

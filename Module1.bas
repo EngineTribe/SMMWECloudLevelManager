@@ -1,5 +1,6 @@
 Attribute VB_Name = "Module1"
 Public LevelFolder As String
+Public Locale As String
 Public ConfigFolder As String
 Public LevelSourceUrl As String
 Public RenameError As String
@@ -8,8 +9,10 @@ Public PageNumber As Integer
 Public PageNumberMax As Integer
 Public Title As String
 Public Version As String
-Public ErrorText(29) As String
+Public ErrorText(33) As String
 Public GameLabel(15) As String
+
+
 Public Function CheckFileExists(FilePath As String) As Boolean
     On Error GoTo Err
     If Len(FilePath) < 2 Then CheckFileExists = False: Exit Function
