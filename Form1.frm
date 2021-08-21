@@ -203,7 +203,9 @@ End Function
 
 
 Private Sub Form_Load()
-Version = "2.0"
+'如果没关卡就跳过rt9
+On Error Resume Next
+Version = "2.1"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
@@ -212,6 +214,9 @@ Set oShell = CreateObject("WScript.Shell")
 LevelFolder = oShell.ExpandEnvironmentStrings("%UserProfile%")
 ConfigFolder = LevelFolder & "\AppData\Local\SMM_WE"
 LevelFolder = LevelFolder & "\AppData\Local\SMM_WE\Niveles"
+   MkDir ConfigFolder
+MkDir LevelFolder
+    
     If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then
     Open ConfigFolder & "\SMMWECloudLocale.cfg" For Input As #3
     Line Input #3, Locale
@@ -438,6 +443,8 @@ Next
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 Private Sub LocalLevelsButton_click()
+'如果没关卡就跳过rt9
+On Error Resume Next
 '处理界面
 DeleteButton.Visible = True
 RenameButton.Visible = True
