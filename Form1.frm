@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form Form1 
    AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
@@ -116,13 +115,6 @@ Begin VB.Form Form1
       TabIndex        =   8
       Top             =   0
       Width           =   9975
-      Begin MSComDlg.CommonDialog CommonDialog1 
-         Left            =   1200
-         Top             =   6000
-         _ExtentX        =   847
-         _ExtentY        =   847
-         _Version        =   393216
-      End
       Begin VB.CommandButton ImportButton 
          Caption         =   "Import"
          Height          =   495
@@ -205,7 +197,7 @@ End Function
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "2.1"
+Version = "2.2"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
@@ -263,6 +255,8 @@ MkDir LevelFolder
     ErrorText(31) = "导入"
     ErrorText(32) = "导入完成！"
     ErrorText(33) = "关卡"
+    ErrorText(34) = "取消"
+    ErrorText(35) = "这个文件夹中没有关卡文件。"
     
     GameLabel(0) = "自动"
     GameLabel(1) = "短小精悍"
@@ -280,7 +274,19 @@ MkDir LevelFolder
     GameLabel(13) = "解谜"
     GameLabel(14) = "林克"
     GameLabel(15) = "无"
-     JSONError = "(关卡解析失败)"
+    GameLabel(16) = "地面"
+    GameLabel(17) = "地下"
+    GameLabel(18) = "天空"
+    GameLabel(19) = "丛林"
+    GameLabel(20) = "沙漠"
+    GameLabel(21) = "城堡"
+    GameLabel(22) = "鬼屋"
+    GameLabel(23) = "飞船"
+    GameLabel(24) = "水中"
+    GameLabel(25) = "雪原"
+    GameLabel(26) = "秋天"
+    GameLabel(27) = "白天"
+    GameLabel(28) = "夜晚"
 ElseIf Locale = "en-us" Then
      LocalLevelsButton.Caption = "Local Level"
      OnlineLevelsButton.Caption = "Online Level"
@@ -295,11 +301,11 @@ ElseIf Locale = "en-us" Then
      ErrorText(3) = Chr(34) & ". "
      ErrorText(4) = "Download"
      ErrorText(5) = "Downloading..."
-     ErrorText(6) = "Download complete!"
+     ErrorText(6) = "Completed!"
      ErrorText(7) = "Rename"
-     ErrorText(8) = "Rename complete!"
+     ErrorText(8) = "Completed!"
      ErrorText(9) = "Delete"
-     ErrorText(10) = "Deletion complete!"
+     ErrorText(10) = "Completed!"
     ErrorText(11) = "(Made with 3.0.0 Offline patch)"
     ErrorText(12) = "Maker: "
     ErrorText(13) = "Stage: "
@@ -320,6 +326,19 @@ ElseIf Locale = "en-us" Then
     GameLabel(13) = "Puzzles"
     GameLabel(14) = "Link"
     GameLabel(15) = "None"
+    GameLabel(16) = "Ground"
+    GameLabel(17) = "Underground"
+    GameLabel(18) = "Athletic"
+    GameLabel(19) = "Jungle"
+    GameLabel(20) = "Desert"
+    GameLabel(21) = "Castle"
+    GameLabel(22) = "Ghost House"
+    GameLabel(23) = "Airship"
+    GameLabel(24) = "Underwater"
+    GameLabel(25) = "Snow"
+    GameLabel(26) = "Autumn"
+    GameLabel(27) = "Day"
+    GameLabel(28) = "Night"
     ErrorText(15) = "Label 1: "
     ErrorText(16) = "Label 2: "
     ErrorText(17) = "Timer: "
@@ -339,7 +358,8 @@ ElseIf Locale = "en-us" Then
     ErrorText(31) = "Import"
     ErrorText(32) = "Completed!"
     ErrorText(33) = "Level"
-     JSONError = "(Level parsing failed)"
+    ErrorText(34) = "Cancel"
+    ErrorText(35) = "No level file was found in that directory."
 ElseIf Locale = "es-es" Then
       LocalLevelsButton.Caption = "Nivel local"
       OnlineLevelsButton.Caption = "Nivel en linea"
@@ -354,11 +374,11 @@ ElseIf Locale = "es-es" Then
       ErrorText(3) = Chr(34) & "."
       ErrorText(4) = "Descargar"
       ErrorText(5) = "Descargando ..."
-      ErrorText(6) = "Descarga completa!"
+      ErrorText(6) = "Completado!"
       ErrorText(7) = "Cambiar nombre"
-      ErrorText(8) = "Cambio de nombre completo!"
+      ErrorText(8) = "Completado!"
       ErrorText(9) = "Borrar"
-      ErrorText(10) = "Eliminacion completa!"
+      ErrorText(10) = "Completado!"
       ErrorText(11) = "(Hecho con el parche 3.0.0 sin conexion)"
      ErrorText(12) = "Creador :"
      ErrorText(13) = "Escenario: "
@@ -379,6 +399,19 @@ ElseIf Locale = "es-es" Then
     GameLabel(13) = "Puzles"
     GameLabel(14) = "Link"
     GameLabel(15) = "Ninguno"
+    GameLabel(16) = "Ground"
+    GameLabel(17) = "Underground"
+    GameLabel(18) = "Athletic"
+    GameLabel(19) = "Jungle"
+    GameLabel(20) = "Desert"
+    GameLabel(21) = "Castle"
+    GameLabel(22) = "Ghost House"
+    GameLabel(23) = "Airship"
+    GameLabel(24) = "Underwater"
+    GameLabel(25) = "Snow"
+    GameLabel(26) = "Autumn"
+    GameLabel(27) = "Dia"
+    GameLabel(28) = "Noche"
     ErrorText(15) = "Etiqueta 1: "
      ErrorText(16) = "Etiqueta 2: "
      ErrorText(17) = "Cronometro: "
@@ -388,7 +421,6 @@ ElseIf Locale = "es-es" Then
     ErrorText(21) = "Rapido"
     ErrorText(22) = "Exportar"
      ErrorText(23) = "Completado!"
-     JSONError = "(Error de analisis de nivel)"
      ErrorText(24) = "SMMWE Cloud subidos"
      ErrorText(25) = " Niveles"
      ErrorText(26) = "Cargando"
@@ -399,6 +431,8 @@ ElseIf Locale = "es-es" Then
     ErrorText(31) = "Importar"
     ErrorText(32) = "Completado!"
     ErrorText(33) = "Nivel"
+    ErrorText(34) = "Cancelar"
+    ErrorText(35) = "No se encontro ningun archivo de nivel en ese directorio."
     End If
     Close #3
     End If
@@ -528,31 +562,7 @@ LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 '导入 调用资源管理器
 Private Sub ImportButton_Click()
-On Error GoTo userCanceled
-With CommonDialog1
-.CancelError = True
-.Flags = cdlOFNHideReadOnly Or cdlOFNAllowMultiselect Or cdlOFNExplorer Or cdlOFNNoDereferenceLinks
-.Filter = "SMM_WE " & ErrorText(33) & "(*.swe)|*.swe"
-.ShowOpen
-FileCopy .FileName, LevelFolder & "\" & Split(.FileName, "\")(UBound(Split(.FileName, "\")) - LBound(Split(.FileName, "\")))
-    ImportButton.Caption = ErrorText(32)
-    DoEvents
-    Sleep (700)
-    ImportButton.Caption = ErrorText(31)
-End With
-        List1.Clear
-        fname = Dir(LevelFolder & "\*.swe", 7)
-        Do
-        If fname = "" Then Exit Do
-        List1.AddItem Replace(fname, ".swe", "")
-        fname = Dir()
-        Loop
-        ReDim locallevel(0 To List1.ListCount - 1)
-        For I = 0 To List1.ListCount - 1
-        locallevel(I) = List1.List(I)
-        Next
-LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
-userCanceled:
+frmOpen.Show
 End Sub
 '删除
 Private Sub DeleteButton_Click()
@@ -684,59 +694,82 @@ If List1.Text <> "" Then
     Line Input #4, LevelContent
     Close #4
     LevelContent = Base64Decode(LevelContent)
-    Debug.Print LevelContent
+    levelcontent2 = Split(LevelContent, ",")
     Dim LevelMaker As String
-    LevelMaker = JSONParse("MAIN.AJUSTES[0].user", LevelContent)
-    If LevelMaker = "0" Then LevelMaker = ErrorText(11)
-    If LevelMaker = "0.000" Then LevelMaker = ErrorText(11)
+    LevelMaker = Replace(Join(Filter(levelcontent2, Chr(34) & "user" & Chr(34)), ""), Chr(34) & "user" & Chr(34) & ": ", "")
+    LevelMaker = Replace(LevelMaker, Chr(34), "")
+    If LevelMaker = " 0" Then LevelMaker = ErrorText(11)
+    If LevelMaker = " 0.000" Then LevelMaker = ErrorText(11)
+    If LevelMaker = " " Then LevelMaker = ErrorText(11)
+    If LevelMaker = "" Then LevelMaker = ErrorText(11)
     Dim GameStyle As String
-    GameStyle = JSONParse("MAIN.AJUSTES[0].apariencia", LevelContent)
-    If GameStyle = "0" Then GameStyle = "SMB1"
-    If GameStyle = "1" Then GameStyle = "SMB3"
-    If GameStyle = "2" Then GameStyle = "SMW"
-    If GameStyle = "3" Then GameStyle = "NSMBU"
-    gamelabel1 = JSONParse("MAIN.AJUSTES[0].etiqueta1", LevelContent)
-    gamelabel2 = JSONParse("MAIN.AJUSTES[0].etiqueta2", LevelContent)
-    If gamelabel1 = "0" Then gamelabel1 = GameLabel(12)
-    If gamelabel1 = "1" Then gamelabel1 = GameLabel(13)
-    If gamelabel1 = "2" Then gamelabel1 = GameLabel(6)
-    If gamelabel1 = "3" Then gamelabel1 = GameLabel(7)
-    If gamelabel1 = "4" Then gamelabel1 = GameLabel(0)
-    If gamelabel1 = "5" Then gamelabel1 = GameLabel(1)
-    If gamelabel1 = "6" Then gamelabel1 = GameLabel(3)
-    If gamelabel1 = "7" Then gamelabel1 = GameLabel(2)
-    If gamelabel1 = "8" Then gamelabel1 = GameLabel(10)
-    If gamelabel1 = "9" Then gamelabel1 = GameLabel(11)
-    If gamelabel1 = "10" Then gamelabel1 = GameLabel(8)
-    If gamelabel1 = "11" Then gamelabel1 = GameLabel(9)
-    If gamelabel1 = "12" Then gamelabel1 = GameLabel(4)
-    If gamelabel1 = "13" Then gamelabel1 = GameLabel(5)
-    If gamelabel1 = "14" Then gamelabel1 = GameLabel(14)
-    If gamelabel2 = "0" Then gamelabel2 = GameLabel(12)
-    If gamelabel2 = "1" Then gamelabel2 = GameLabel(13)
-    If gamelabel2 = "2" Then gamelabel2 = GameLabel(6)
-    If gamelabel2 = "3" Then gamelabel2 = GameLabel(7)
-    If gamelabel2 = "4" Then gamelabel2 = GameLabel(0)
-    If gamelabel2 = "5" Then gamelabel2 = GameLabel(1)
-    If gamelabel2 = "6" Then gamelabel2 = GameLabel(3)
-    If gamelabel2 = "7" Then gamelabel2 = GameLabel(2)
-    If gamelabel2 = "8" Then gamelabel2 = GameLabel(10)
-    If gamelabel2 = "9" Then gamelabel2 = GameLabel(11)
-    If gamelabel2 = "10" Then gamelabel2 = GameLabel(8)
-    If gamelabel2 = "11" Then gamelabel2 = GameLabel(9)
-    If gamelabel2 = "12" Then gamelabel2 = GameLabel(4)
-    If gamelabel2 = "13" Then gamelabel2 = GameLabel(5)
-    If gamelabel2 = "14" Then gamelabel2 = GameLabel(14)
-    If gamelabel1 = "-1" Then gamelabel1 = GameLabel(15)
-    If gamelabel2 = "-1" Then gamelabel2 = GameLabel(15)
+    GameStyle = Replace(Join(Filter(levelcontent2, Chr(34) & "apariencia" & Chr(34)), ""), Chr(34) & "apariencia" & Chr(34) & ": ", "")
+    GameStyle = Replace(GameStyle, " } ]", "")
+    If GameStyle = " 0" Then GameStyle = "SMB1"
+    If GameStyle = " 1" Then GameStyle = "SMB3"
+    If GameStyle = " 2" Then GameStyle = "SMW"
+    If GameStyle = " 3" Then GameStyle = "NSMBU"
+    Dim GameLabel1, GameLabel2 As String
+    GameLabel1 = Replace(Join(Filter(levelcontent2, Chr(34) & "etiqueta1" & Chr(34)), ""), Chr(34) & "etiqueta1" & Chr(34) & ": ", "")
+    GameLabel2 = Replace(Join(Filter(levelcontent2, Chr(34) & "etiqueta2" & Chr(34)), ""), Chr(34) & "etiqueta2" & Chr(34) & ": ", "")
+    If GameLabel1 = " 0" Then GameLabel1 = GameLabel(12)
+    If GameLabel1 = " 1" Then GameLabel1 = GameLabel(13)
+    If GameLabel1 = " 2" Then GameLabel1 = GameLabel(6)
+    If GameLabel1 = " 3" Then GameLabel1 = GameLabel(7)
+    If GameLabel1 = " 4" Then GameLabel1 = GameLabel(0)
+    If GameLabel1 = " 5" Then GameLabel1 = GameLabel(1)
+    If GameLabel1 = " 6" Then GameLabel1 = GameLabel(3)
+    If GameLabel1 = " 7" Then GameLabel1 = GameLabel(2)
+    If GameLabel1 = " 8" Then GameLabel1 = GameLabel(10)
+    If GameLabel1 = " 9" Then GameLabel1 = GameLabel(11)
+    If GameLabel1 = " 10" Then GameLabel1 = GameLabel(8)
+    If GameLabel1 = " 11" Then GameLabel1 = GameLabel(9)
+    If GameLabel1 = " 12" Then GameLabel1 = GameLabel(4)
+    If GameLabel1 = " 13" Then GameLabel1 = GameLabel(5)
+    If GameLabel1 = " 14" Then GameLabel1 = GameLabel(14)
+    If GameLabel2 = " 0" Then GameLabel2 = GameLabel(12)
+    If GameLabel2 = " 1" Then GameLabel2 = GameLabel(13)
+    If GameLabel2 = " 2" Then GameLabel2 = GameLabel(6)
+    If GameLabel2 = " 3" Then GameLabel2 = GameLabel(7)
+    If GameLabel2 = " 4" Then GameLabel2 = GameLabel(0)
+    If GameLabel2 = " 5" Then GameLabel2 = GameLabel(1)
+    If GameLabel2 = " 6" Then GameLabel2 = GameLabel(3)
+    If GameLabel2 = " 7" Then GameLabel2 = GameLabel(2)
+    If GameLabel2 = " 8" Then GameLabel2 = GameLabel(10)
+    If GameLabel2 = " 9" Then GameLabel2 = GameLabel(11)
+    If GameLabel2 = " 10" Then GameLabel2 = GameLabel(8)
+    If GameLabel2 = " 11" Then GameLabel2 = GameLabel(9)
+    If GameLabel2 = " 12" Then GameLabel2 = GameLabel(4)
+    If GameLabel2 = " 13" Then GameLabel2 = GameLabel(5)
+    If GameLabel2 = " 14" Then GameLabel2 = GameLabel(14)
+    If GameLabel1 = " -1" Then GameLabel1 = GameLabel(15)
+    If GameLabel2 = " -1" Then GameLabel2 = GameLabel(15)
     Dim AutoScroll As String
-    AutoScroll = JSONParse("MAIN.AJUSTES[0].autoavance", LevelContent)
-    If AutoScroll = "0" Then AutoScroll = GameLabel(15)
-    If AutoScroll = "1" Then AutoScroll = ErrorText(19)
-    If AutoScroll = "2" Then AutoScroll = ErrorText(20)
-    If AutoScroll = "3" Then AutoScroll = ErrorText(21)
-    MsgBox ErrorText(12) & JSONParse("MAIN.AJUSTES[0].user", LevelContent) & vbCrLf & ErrorText(13) & JSONParse("MAIN.AJUSTES[0].entorno", LevelContent) _
-    & vbCrLf & ErrorText(13) & GameStyle & vbCrLf & ErrorText(15) & gamelabel1 & "  " & ErrorText(16) & gamelabel2 & vbCrLf & ErrorText(17) & JSONParse("MAIN.AJUSTES[0].cronometro", LevelContent) _
+    AutoScroll = Replace(Join(Filter(levelcontent2, Chr(34) & "autoavance" & Chr(34)), ""), Chr(34) & "autoavance" & Chr(34) & ": ", "")
+    If AutoScroll = " 0" Then AutoScroll = GameLabel(15)
+    If AutoScroll = " 1" Then AutoScroll = ErrorText(19)
+    If AutoScroll = " 2" Then AutoScroll = ErrorText(20)
+    If AutoScroll = " 3" Then AutoScroll = ErrorText(21)
+    Dim StageStyle, LevelTimer, IsDayNight As String
+    LevelTimer = Replace(Join(Filter(levelcontent2, Chr(34) & "cronometro" & Chr(34)), ""), Chr(34) & "cronometro" & Chr(34) & ": ", "")
+    IsDayNight = Replace(Join(Filter(levelcontent2, Chr(34) & "modo_noche" & Chr(34)), ""), Chr(34) & "modo_noche" & Chr(34) & ": ", "")
+    If IsDayNight = " 0" Then IsDayNight = GameLabel(27)
+    If IsDayNight = " 1" Then IsDayNight = GameLabel(28)
+    StageStyle = Replace(Join(Filter(levelcontent2, Chr(34) & "entorno" & Chr(34)), ""), Chr(34) & "entorno" & Chr(34) & ": ", "")
+    StageStyle = Replace(StageStyle, Chr(34), "")
+    If StageStyle = " ground" Then StageStyle = GameLabel(16)
+    If StageStyle = " underground" Then StageStyle = GameLabel(17)
+    If StageStyle = " sky" Then StageStyle = GameLabel(18)
+    If StageStyle = " forest" Then StageStyle = GameLabel(19)
+    If StageStyle = " desert" Then StageStyle = GameLabel(20)
+    If StageStyle = " castle" Then StageStyle = GameLabel(21)
+    If StageStyle = " ghost" Then StageStyle = GameLabel(22)
+    If StageStyle = " airship" Then StageStyle = GameLabel(23)
+    If StageStyle = " underwater" Then StageStyle = GameLabel(24)
+    If StageStyle = " snow" Then StageStyle = GameLabel(25)
+    If StageStyle = " fall" Then StageStyle = GameLabel(26)
+    MsgBox ErrorText(12) & LevelMaker & vbCrLf & ErrorText(14) & GameStyle _
+    & vbCrLf & ErrorText(13) & StageStyle & " " & IsDayNight & vbCrLf & ErrorText(15) & GameLabel1 & "  " & ErrorText(16) & GameLabel2 & vbCrLf & ErrorText(17) & LevelTimer _
     & vbCrLf & ErrorText(18) & AutoScroll _
     , vbOKOnly, InfoButton.Caption
 End If

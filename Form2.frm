@@ -97,3 +97,4 @@ Label1.Caption = "ÇëÑ¡ÔñÄãµÄÓïÑÔ¡£" & vbCrLf & "Please select your language." & 
     Form1.Show
     End If
 End Sub
+

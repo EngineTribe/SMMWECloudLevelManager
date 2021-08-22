@@ -4,13 +4,12 @@ Public Locale As String
 Public ConfigFolder As String
 Public LevelSourceUrl As String
 Public RenameError As String
-Public JSONError As String
 Public PageNumber As Integer
 Public PageNumberMax As Integer
 Public Title As String
 Public Version As String
-Public ErrorText(33) As String
-Public GameLabel(15) As String
+Public ErrorText(35) As String
+Public GameLabel(28) As String
 
 
 Public Function CheckFileExists(FilePath As String) As Boolean
@@ -21,14 +20,14 @@ Public Function CheckFileExists(FilePath As String) As Boolean
 Err:
     CheckFileExists = False
 End Function
-Public Function JSONParse(ByVal JSONPath As String, ByVal JSONString As String) As Variant
-    On Error GoTo Err
-    Dim JSON As Object
-    Set JSON = CreateObject("MSScriptControl.ScriptControl")
-    JSON.Language = "JScript"
-    JSONParse = JSON.eval("JSON=" & JSONString & ";JSON." & JSONPath & ";")
-    Set JSON = Nothing
-    Exit Function
-Err:
-    JSONParse = JSONError
-End Function
+'Public Function JSONParse(ByVal JSONPath As String, ByVal JSONString As String) As Variant
+'    On Error GoTo Err
+'    Dim JSON As Object
+'    Set JSON = CreateObject("MSScriptControl.ScriptControl")
+'    JSON.Language = "JScript"
+'    JSONParse = JSON.eval("JSON=" & JSONString & ";JSON." & JSONPath & ";")
+'    Set JSON = Nothing
+'    Exit Function
+'Err:
+'    JSONParse = JSONError
+'End Function
