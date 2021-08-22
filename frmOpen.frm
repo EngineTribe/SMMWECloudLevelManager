@@ -123,10 +123,6 @@ End Sub
 Private Sub File1_DblClick()
     OpenLevel
 End Sub
-
-Private Sub File1_KeyPress(KeyAscii As Integer)
-    If KeyAscii = vbKeyReturn Then OpenLevel
-End Sub
 Private Sub OpenLevel()
         Dim fname As String, I As Integer
     If File1.ListIndex > 0 Then
