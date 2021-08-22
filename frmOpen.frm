@@ -144,7 +144,7 @@ Private Sub Form_Load()
     On Error GoTo Err
     frmOpen.Caption = ErrorText(31)
     OpenButton.Caption = ErrorText(31)
-    OpenButton.Caption = ErrorText(34)
+    CancelButton.Caption = ErrorText(34)
     File1.Pattern = "*.swe"
     Dim oShell
     Set oShell = CreateObject("WScript.Shell")
