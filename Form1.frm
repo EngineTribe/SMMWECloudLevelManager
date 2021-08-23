@@ -194,13 +194,10 @@ End Function
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "2.5fix1"
+Version = "2.5fix2"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
-LevelFolder = "C:\Users\" & VBA.Environ("UserName") & "\AppData\Local\SMM_WE\Niveles"
-ConfigFolder = "C:\Users\" & VBA.Environ("UserName") & "\AppData\Local\SMM_WE"
-DesktopFolder = "C:\Users\" & VBA.Environ("UserName") & "\Desktop"
    MkDir ConfigFolder
 MkDir LevelFolder
     
@@ -356,8 +353,8 @@ ElseIf Locale = "en-us" Then
     ErrorText(34) = "Cancel"
     ErrorText(35) = "No level file was found in that directory."
 ElseIf Locale = "es-es" Then
-      LocalLevelsButton.Caption = "Nivel local"
-      OnlineLevelsButton.Caption = "Nivel en linea"
+      LocalLevelsButton.Caption = "Niveles local"
+      OnlineLevelsButton.Caption = "Niveles Mundial"
       UploadButton.Caption = "Subir Nivel"
     InfoButton.Caption = "info de nivel"
       AboutButton.Caption = "Sobre"
