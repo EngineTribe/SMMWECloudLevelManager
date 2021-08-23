@@ -2,6 +2,7 @@ Attribute VB_Name = "Module1"
 Public LevelFolder As String
 Public Locale As String
 Public ConfigFolder As String
+Public DesktopFolder As String
 Public LevelSourceUrl As String
 Public RenameError As String
 Public PageNumber As Integer

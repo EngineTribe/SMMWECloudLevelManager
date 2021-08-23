@@ -197,15 +197,13 @@ End Function
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "2.3fix1"
+Version = "2.4"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
-Dim oShell
-Set oShell = CreateObject("WScript.Shell")
-LevelFolder = oShell.ExpandEnvironmentStrings("%UserProfile%")
-ConfigFolder = LevelFolder & "\AppData\Local\SMM_WE"
-LevelFolder = LevelFolder & "\AppData\Local\SMM_WE\Niveles"
+LevelFolder = "C:\Users\" & VBA.Environ(username) & "\AppData\Local\SMM_WE\Niveles"
+LevelFolder = "C:\Users\" & VBA.Environ(username) & "\AppData\Local\SMM_WE"
+DesktopFolder = "C:\Users\" & VBA.Environ(username) & "\Desktop"
    MkDir ConfigFolder
 MkDir LevelFolder
     
@@ -777,10 +775,6 @@ End Sub
 Private Sub ExtractButton_Click()
 '导出关卡按钮
 If List1.Text <> "" Then
-Dim oShell
-Set oShell = CreateObject("WScript.Shell")
-DesktopFolder = oShell.ExpandEnvironmentStrings("%UserProfile%")
-DesktopFolder = DesktopFolder & "\Desktop"
 FileCopy LevelFolder & "\" & List1.Text & ".swe", DesktopFolder & "\" & List1.Text & ".swe"
     ExtractButton.Caption = ErrorText(23)
     DoEvents
