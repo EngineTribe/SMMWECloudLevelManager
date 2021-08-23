@@ -98,7 +98,7 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   4560
+      Height          =   4260
       Left            =   2070
       TabIndex        =   0
       TabStop         =   0   'False
@@ -186,24 +186,21 @@ Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Private Declare Function URLDownloadToFile Lib "urlmon" Alias "URLDownloadToFileA" (ByVal pCaller As Long, ByVal szURL As String, ByVal szFileName As String, ByVal dwReserved As Long, ByVal lpfnCB As Long) As Long
 Public Function DownloadFile(ByVal strURL As String, ByVal strFile As String) As Boolean
    Dim lngReturn As Long
+   DoEvents
    lngReturn = URLDownloadToFile(0, strURL, strFile, 0, 0)
+   DoEvents
    If lngReturn = 0 Then DownloadFile = True
 End Function
-
-
-
-
-
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "2.4"
+Version = "2.5fix1"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
-LevelFolder = "C:\Users\" & VBA.Environ(username) & "\AppData\Local\SMM_WE\Niveles"
-LevelFolder = "C:\Users\" & VBA.Environ(username) & "\AppData\Local\SMM_WE"
-DesktopFolder = "C:\Users\" & VBA.Environ(username) & "\Desktop"
+LevelFolder = "C:\Users\" & VBA.Environ("UserName") & "\AppData\Local\SMM_WE\Niveles"
+ConfigFolder = "C:\Users\" & VBA.Environ("UserName") & "\AppData\Local\SMM_WE"
+DesktopFolder = "C:\Users\" & VBA.Environ("UserName") & "\Desktop"
    MkDir ConfigFolder
 MkDir LevelFolder
     
@@ -256,19 +253,19 @@ MkDir LevelFolder
     ErrorText(34) = "取消"
     ErrorText(35) = "这个文件夹中没有关卡文件。"
     
-    GameLabel(0) = "自动"
-    GameLabel(1) = "短小精悍"
+    GameLabel(0) = "自动马力欧"
+    GameLabel(1) = "一次通过"
     GameLabel(2) = "多人对战"
-    GameLabel(3) = "主题"
+    GameLabel(3) = "机关设计"
     GameLabel(4) = "BOSS战"
-    GameLabel(5) = "单人"
+    GameLabel(5) = "单打"
     GameLabel(6) = "计时挑战"
     GameLabel(7) = "自动卷轴"
     GameLabel(8) = "技巧"
     GameLabel(9) = "射击"
     GameLabel(10) = "音乐"
     GameLabel(11) = "美术"
-    GameLabel(12) = "传统"
+    GameLabel(12) = "标准"
     GameLabel(13) = "解谜"
     GameLabel(14) = "林克"
     GameLabel(15) = "无"
@@ -279,7 +276,7 @@ MkDir LevelFolder
     GameLabel(20) = "沙漠"
     GameLabel(21) = "城堡"
     GameLabel(22) = "鬼屋"
-    GameLabel(23) = "飞船"
+    GameLabel(23) = "飞行船"
     GameLabel(24) = "水中"
     GameLabel(25) = "雪原"
     GameLabel(26) = "秋天"
@@ -529,6 +526,7 @@ Search.ForeColor = RGB(130, 130, 130)
 List1.Height = 4860
 '拉取页数
 PageNumber = 1
+DoEvents
     Debug.Print DownloadFile("https://cloud.smmwe.ml/main/?filename", ConfigFolder & "\SMMWECloudLevelList.json")
     Dim pagelist As String
     Open ConfigFolder & "\SMMWECloudLevelList.json" For Input As #6
@@ -597,7 +595,6 @@ If List1.Text <> "" Then
     DownloadButton.Caption = ErrorText(4)
 End If
 End Sub
-
 
 
 '重命名
@@ -791,6 +788,7 @@ LevelSourceUrl = "https://cloud.smmwe.ml/main/"
 Else
 LevelSourceUrl = "https://cloud.smmwe.ml/main/Levels%20Page%20" & CStr(PageNumber - 1) & "/"
 End If
+DoEvents
     PageButton.Caption = ErrorText(27) & " " & CStr(PageNumber) & "/" & CStr(PageNumberMax)
     '拉取关卡
     Debug.Print DownloadFile(LevelSourceUrl & "?filename", ConfigFolder & "\SMMWECloudLevelList.json")

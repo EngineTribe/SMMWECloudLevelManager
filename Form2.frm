@@ -1,26 +1,23 @@
 VERSION 5.00
 Begin VB.Form Form2 
    Caption         =   "SMMWE Cloud Tool Config"
-   ClientHeight    =   2325
+   ClientHeight    =   2328
    ClientLeft      =   60
-   ClientTop       =   405
-   ClientWidth     =   5595
+   ClientTop       =   408
+   ClientWidth     =   5592
    BeginProperty Font 
-      Name            =   "Œ¢»Ì—≈∫⁄"
-      Size            =   9
-      Charset         =   134
-      Weight          =   400
-      Underline       =   0   'False
-      Italic          =   0   'False
-      Strikethrough   =   0   'False
    EndProperty
-   Icon            =   "Form2.frx":0000
+   Font            =   "Form2.frx":0000
+   Icon            =   "Form2.frx":0013
    LinkTopic       =   "Form2"
-   ScaleHeight     =   2325
-   ScaleWidth      =   5595
+   ScaleHeight     =   2328
+   ScaleWidth      =   5592
    StartUpPosition =   3  '¥∞ø⁄»± °
    Begin VB.CommandButton Command3 
       Caption         =   "Espanol"
+      BeginProperty Font 
+      EndProperty
+      Font            =   "Form2.frx":2B0D
       Height          =   615
       Left            =   3840
       TabIndex        =   2
@@ -29,6 +26,9 @@ Begin VB.Form Form2
    End
    Begin VB.CommandButton Command2 
       Caption         =   "English"
+      BeginProperty Font 
+      EndProperty
+      Font            =   "Form2.frx":2B20
       Height          =   615
       Left            =   2040
       TabIndex        =   1
@@ -37,6 +37,9 @@ Begin VB.Form Form2
    End
    Begin VB.CommandButton Command1 
       Caption         =   "ºÚÃÂ÷–Œƒ"
+      BeginProperty Font 
+      EndProperty
+      Font            =   "Form2.frx":2B33
       Height          =   615
       Left            =   240
       TabIndex        =   0
@@ -44,6 +47,9 @@ Begin VB.Form Form2
       Width           =   1455
    End
    Begin VB.Label Label1 
+      BeginProperty Font 
+      EndProperty
+      Font            =   "Form2.frx":2B46
       Height          =   975
       Left            =   240
       TabIndex        =   3
@@ -85,16 +91,21 @@ Unload Form2
 End Sub
 
 Private Sub Form_Load()
-Set oShell = CreateObject("WScript.Shell")
-LevelFolder = oShell.ExpandEnvironmentStrings("%UserProfile%")
-ConfigFolder = LevelFolder & "\AppData\Local\SMM_WE"
-LevelFolder = LevelFolder & "\AppData\Local\SMM_WE\Niveles"
+On Error GoTo Err
+ConfigFolder = "C:\Users\" & VBA.Environ("UserName") & "\AppData\Local\SMM_WE"
 Label1.Caption = "«Î—°‘Òƒ„µƒ”Ô—‘°£" & vbCrLf & "Please select your language." & vbCrLf & "Seleccione su idioma."
     If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then
     Load Form1
-    Form2.Hide
-    Unload Form2
+    Unload Me
+    Form1.Show
+    End If
+    Exit Sub
+Err:
+ConfigFolder = "C:\Users\" & Environ("UserName") & "\AppData\Local\SMM_WE"
+Label1.Caption = "«Î—°‘Òƒ„µƒ”Ô—‘°£" & vbCrLf & "Please select your language." & vbCrLf & "Seleccione su idioma."
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then
+    Load Form1
+    Unload Me
     Form1.Show
     End If
 End Sub
-
