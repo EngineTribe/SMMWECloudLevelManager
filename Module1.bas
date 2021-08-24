@@ -9,16 +9,14 @@ Public PageNumber As Integer
 Public PageNumberMax As Integer
 Public Title As String
 Public Version As String
-Public ErrorText(35) As String
+Public ErrorText(40) As String
 Public GameLabel(28) As String
-
-
 Public Function CheckFileExists(FilePath As String) As Boolean
-    On Error GoTo Err
+    On Error GoTo ERR
     If Len(FilePath) < 2 Then CheckFileExists = False: Exit Function
             If Dir$(FilePath, vbAllFileAttrib) <> vbNullString Then CheckFileExists = True
     Exit Function
-Err:
+ERR:
     CheckFileExists = False
 End Function
 'Public Function JSONParse(ByVal JSONPath As String, ByVal JSONString As String) As Variant

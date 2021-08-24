@@ -27,7 +27,7 @@ Begin VB.Form Form1
       Height          =   495
       Left            =   8160
       TabIndex        =   12
-      Top             =   1320
+      Top             =   720
       Width           =   1695
    End
    Begin VB.CommandButton AboutButton 
@@ -51,7 +51,7 @@ Begin VB.Form Form1
       Height          =   495
       Left            =   8160
       TabIndex        =   5
-      Top             =   720
+      Top             =   3120
       Width           =   1695
    End
    Begin VB.CommandButton DownloadButton 
@@ -184,17 +184,36 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Private Declare Function URLDownloadToFile Lib "urlmon" Alias "URLDownloadToFileA" (ByVal pCaller As Long, ByVal szURL As String, ByVal szFileName As String, ByVal dwReserved As Long, ByVal lpfnCB As Long) As Long
-Public Function DownloadFile(ByVal strURL As String, ByVal strFile As String) As Boolean
+Public Function DownloadFile(ByVal StrUrl As String, ByVal strFile As String) As Boolean
    Dim lngReturn As Long
    DoEvents
-   lngReturn = URLDownloadToFile(0, strURL, strFile, 0, 0)
+   lngReturn = URLDownloadToFile(0, StrUrl, strFile, 0, 0)
    DoEvents
    If lngReturn = 0 Then DownloadFile = True
+End Function
+
+Public Function PostData(ByVal StrUrl As String, ByVal StrData As String) As Variant
+  On Error GoTo ERR:
+  Dim XMLHTTP As Object
+  Dim DataS As String
+  Dim DataB() As Byte
+  Set XMLHTTP = CreateObject("Microsoft.XMLHTTP")
+  XMLHTTP.Open "POST", StrUrl, True
+  XMLHTTP.send (StrData)
+  Do Until XMLHTTP.ReadyState = 4
+    DoEvents
+    Sleep (5)
+  Loop
+PostData = "Completed"
+  Set XMLHTTP = Nothing
+  Exit Function
+ERR:
+  PostData = ""
 End Function
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "2.5fix2"
+Version = "3.0"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
@@ -249,6 +268,11 @@ MkDir LevelFolder
     ErrorText(33) = "关卡"
     ErrorText(34) = "取消"
     ErrorText(35) = "这个文件夹中没有关卡文件。"
+    ErrorText(36) = "将会上传 "
+    ErrorText(37) = " 到 SMMWE Cloud。确定？"
+    ErrorText(38) = "上传成功！"
+    ErrorText(39) = "上传"
+    ErrorText(40) = "上传中..."
     
     GameLabel(0) = "自动马力欧"
     GameLabel(1) = "一次通过"
@@ -282,7 +306,7 @@ MkDir LevelFolder
 ElseIf Locale = "en-us" Then
      LocalLevelsButton.Caption = "Local Level"
      OnlineLevelsButton.Caption = "Online Level"
-     UploadButton.Caption = "Upload"
+     UploadButton.Caption = "Upload Level"
      AboutButton.Caption = "About"
     InfoButton.Caption = "Level Info"
     Title = "SMMWE Cloud Level Manager " & Version
@@ -352,11 +376,16 @@ ElseIf Locale = "en-us" Then
     ErrorText(33) = "Level"
     ErrorText(34) = "Cancel"
     ErrorText(35) = "No level file was found in that directory."
+    ErrorText(36) = "Will upload "
+    ErrorText(37) = " to SMMWE Cloud, sure?"
+    ErrorText(38) = "Upload Completed!"
+    ErrorText(39) = "Upload Level"
+    ErrorText(40) = "Uploading..."
 ElseIf Locale = "es-es" Then
       LocalLevelsButton.Caption = "Niveles local"
       OnlineLevelsButton.Caption = "Niveles Mundial"
       UploadButton.Caption = "Subir Nivel"
-    InfoButton.Caption = "info de nivel"
+    InfoButton.Caption = "Info de Nivel"
       AboutButton.Caption = "Sobre"
     Title = "SMMWE Cloud Level Manager " & Version
       RenameError = "No se pudo cambiar el nombre, el nombre del nivel no se puede dejar en blanco."
@@ -425,6 +454,11 @@ ElseIf Locale = "es-es" Then
     ErrorText(33) = "Nivel"
     ErrorText(34) = "Cancelar"
     ErrorText(35) = "No se encontro ningun archivo de nivel en ese directorio."
+    ErrorText(36) = "Subira "
+    ErrorText(37) = " a SMMWE Cloud, seguro?"
+    ErrorText(38) = "Subir completado!"
+    ErrorText(39) = "Subir Nivel"
+    ErrorText(40) = "Subiendo..."
     End If
     Close #3
     End If
@@ -434,14 +468,14 @@ ElseIf Locale = "es-es" Then
     ExtractButton.Caption = ErrorText(22)
     ImportButton.Caption = ErrorText(31)
 '删除在线关卡列表缓存
-    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.json") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.json"
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
 '处理界面
     Form1.Caption = Title & " - " & LocalLevelsButton.Caption
 DeleteButton.Visible = True
 InfoButton.Visible = True
 RenameButton.Visible = True
 DownloadButton.Visible = False
-UploadButton.Visible = False
+UploadButton.Visible = True
 ExtractButton.Visible = True
 List1.Top = 120
 List1.Height = 5340
@@ -477,7 +511,7 @@ RenameButton.Visible = True
 ImportButton.Visible = True
 InfoButton.Visible = True
 DownloadButton.Visible = False
-UploadButton.Visible = False
+UploadButton.Visible = True
 ExtractButton.Visible = True
 SearchButton.Visible = False
 PageButton.Visible = False
@@ -501,7 +535,7 @@ LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 Private Sub OnlineLevelsButton_Click()
 '在线关卡按钮
-    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.json") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.json"
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
 LevelSourceUrl = "https://cloud.smmwe.ml/main/"
 
     Form1.Caption = Title & " - " & OnlineLevelsButton.Caption
@@ -513,7 +547,7 @@ ExtractButton.Visible = False
 DownloadButton.Visible = True
 InfoButton.Visible = False
 ImportButton.Visible = False
-UploadButton.Visible = True
+UploadButton.Visible = False
 PageButton.Visible = True
 Search.Visible = True
 SearchButton.Visible = True
@@ -524,9 +558,9 @@ List1.Height = 4860
 '拉取页数
 PageNumber = 1
 DoEvents
-    Debug.Print DownloadFile("https://cloud.smmwe.ml/main/?filename", ConfigFolder & "\SMMWECloudLevelList.json")
+    Debug.Print DownloadFile("https://cloud.smmwe.ml/main/?filename", ConfigFolder & "\SMMWECloudLevelList.txt")
     Dim pagelist As String
-    Open ConfigFolder & "\SMMWECloudLevelList.json" For Input As #6
+    Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #6
     Line Input #6, pagelist
     onlinepage = Split(pagelist, vbLf)
     onlinepage = Filter(onlinepage, "Levels Page")
@@ -534,7 +568,7 @@ DoEvents
     Close #6
     '拉取关卡
     Dim filelist As String
-    Open ConfigFolder & "\SMMWECloudLevelList.json" For Input As #1
+    Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
     Line Input #1, filelist
     OnlineLevel = Split(filelist, vbLf)
     OnlineLevel = Filter(OnlineLevel, ".swe")
@@ -559,12 +593,14 @@ frmOpen.Show
 End Sub
 '删除
 Private Sub DeleteButton_Click()
+On Error Resume Next
 If List1.Text <> "" Then
     IfDelete = MsgBox(ErrorText(0) & List1.Text & ErrorText(1), 1, "")
     If IfDelete = 1 Then
     Kill LevelFolder & "\" & List1.Text & ".swe"
     DeleteButton.Caption = ErrorText(10)
-    Sleep (1000)
+    DoEvents
+    Sleep (700)
     DeleteButton.Caption = ErrorText(9)
 List1.Clear
 fname = Dir(LevelFolder & "\*.swe", 7)
@@ -585,10 +621,13 @@ End Sub
 Private Sub DownloadButton_Click()
 If List1.Text <> "" Then
     DownloadButton.Caption = ErrorText(5)
-    Debug.Print DownloadFile(LevelSourceUrl & List1.Text & ".swe", LevelFolder & "\" & List1.Text & ".swe")
+    Dim DownloadFileName As String
+    DownloadFileName = List1.Text & ".swe"
+    If CheckFileExists(LevelFolder & "\" & List1.Text & ".swe") = True Then DownloadFileName = List1.Text & " (1).swe"
+    Debug.Print DownloadFile(LevelSourceUrl & Replace(List1.Text, " ", "%20") & ".swe", LevelFolder & "\" & DownloadFileName)
     DownloadButton.Caption = ErrorText(6)
     DoEvents
-    Sleep (1000)
+    Sleep (500)
     DownloadButton.Caption = ErrorText(4)
 End If
 End Sub
@@ -596,16 +635,17 @@ End Sub
 
 '重命名
 Private Sub RenameButton_Click()
-
+On Error Resume Next
 If List1.Text <> "" Then
     NewName = InputBox(ErrorText(2) & List1.Text & ErrorText(3), "")
     If NewName <> "" Then
      If NewName <> " " Then
-       Name LevelFolder & "\" & List1.Text & ".swe" As LevelFolder & "\" & NewName & ".swe"
-    RenameButton.Caption = ErrorText(8)
-    DoEvents
-    Sleep (1000)
-    RenameButton.Caption = ErrorText(7)
+        If CheckFileExists(LevelFolder & "\" & NewName & ".swe") = True Then NewName = NewName & "(1)"
+        Name LevelFolder & "\" & List1.Text & ".swe" As LevelFolder & "\" & NewName & ".swe"
+        RenameButton.Caption = ErrorText(8)
+        DoEvents
+        Sleep (700)
+        RenameButton.Caption = ErrorText(7)
         List1.Clear
         fname = Dir(LevelFolder & "\*.swe", 7)
         Do
@@ -649,7 +689,7 @@ List1.Clear
 End If
 
 If Search.Text = "" Then
-    Open ConfigFolder & "\SMMWECloudLevelList.json" For Input As #1
+    Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
     Line Input #1, filelist
     OnlineLevel = Split(filelist, vbLf)
     OnlineLevel = Filter(OnlineLevel, ".swe")
@@ -670,7 +710,40 @@ LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 
 Private Sub UploadButton_Click()
-Shell "cmd /c start https://cloud.smmwe.ml/upload", vbMinimizedNoFocus
+On Error Resume Next
+'上传
+Dim CanUpload As Boolean, LevelContentTmp As String
+If MsgBox(ErrorText(36) & List1.Text & ErrorText(37), vbOKCancel + vbExclamation, ErrorText(39)) = vbCancel Then GoTo Err6
+UploadButton.Caption = ErrorText(40)
+CanUpload = False
+If List1.Text <> "" Then
+    Debug.Print DownloadFile("https://cloud.smmwe.ml/main/" & Replace(List1.Text, " ", "%20") & ".swe", ConfigFolder & "\" & List1.Text & ".tmp")
+    If CheckFileExists(ConfigFolder & "\" & List1.Text & ".tmp") = False Then
+        CanUpload = True
+    Else
+        Open ConfigFolder & "\" & List1.Text & ".tmp" For Input As #7
+        Line Input #7, LevelContentTmp
+        Close #7
+        LevelContentTmp = Join(Filter(Split(LevelContentTmp, vbLf), "itemNotFound"), "")
+        If LevelContentTmp = "<h1>itemNotFound</h1>" Then CanUpload = True
+    End If
+    Kill ConfigFolder & "\" & List1.Text & ".tmp"
+        Open LevelFolder & "\" & List1.Text & ".swe" For Input As #8
+        Line Input #8, LevelContentTmp
+        Close #8
+    If CanUpload = True Then
+        Debug.Print PostData("https://api.smmwe.ml/?upload=" & Replace(List1.Text, " ", "%20") & ".swe&key=yidaozhan-gq-franyer-farias", LevelContentTmp)
+    Else
+        Dim LevelMaker As String
+        LevelMaker = Replace(Join(Filter(Split(LevelContentTmp, ","), Chr(34) & "user" & Chr(34)), ""), Chr(34) & "user" & Chr(34) & ": ", "")
+        LevelMaker = Replace(LevelMaker, Chr(34), "")
+        Debug.Print PostData("https://api.smmwe.ml/?upload=" & Replace(List1.Text, " ", "%20") & " By" & LevelMaker & ".swe&key=yidaozhan-gq-franyer-farias", LevelContentTmp)
+    End If
+    UploadButton.Caption = ErrorText(39)
+    MsgBox ErrorText(38)
+End If
+Exit Sub
+Err6:
 End Sub
 
 
@@ -680,6 +753,7 @@ frmAbout.Show
 End Sub
 
 Private Sub InfoButton_Click()
+'关卡信息
 If List1.Text <> "" Then
     Dim LevelContent As String
     Open LevelFolder & "\" & List1.Text & ".swe" For Input As #4
@@ -772,7 +846,7 @@ If List1.Text <> "" Then
 FileCopy LevelFolder & "\" & List1.Text & ".swe", DesktopFolder & "\" & List1.Text & ".swe"
     ExtractButton.Caption = ErrorText(23)
     DoEvents
-    Sleep (1000)
+    Sleep (700)
     ExtractButton.Caption = ErrorText(22)
 End If
 End Sub
@@ -788,9 +862,9 @@ End If
 DoEvents
     PageButton.Caption = ErrorText(27) & " " & CStr(PageNumber) & "/" & CStr(PageNumberMax)
     '拉取关卡
-    Debug.Print DownloadFile(LevelSourceUrl & "?filename", ConfigFolder & "\SMMWECloudLevelList.json")
+    Debug.Print DownloadFile(LevelSourceUrl & "?filename", ConfigFolder & "\SMMWECloudLevelList.txt")
     Dim filelist As String
-    Open ConfigFolder & "\SMMWECloudLevelList.json" For Input As #1
+    Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
     Line Input #1, filelist
     OnlineLevel = Split(filelist, vbLf)
     OnlineLevel = Filter(OnlineLevel, ".swe")
