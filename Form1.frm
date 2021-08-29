@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form Form1 
    AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "EngineTool"
+   Caption         =   "SMMWECloudLevelManager"
    ClientHeight    =   6105
    ClientLeft      =   9375
    ClientTop       =   3435
@@ -22,6 +22,76 @@ Begin VB.Form Form1
    MinButton       =   0   'False
    ScaleHeight     =   6105
    ScaleWidth      =   9960
+   Begin VB.CommandButton Download2Button 
+      Caption         =   "OK"
+      Height          =   495
+      Left            =   4530
+      TabIndex        =   24
+      Top             =   4200
+      Width           =   1575
+   End
+   Begin VB.CommandButton IDConfirm 
+      Caption         =   "OK"
+      Height          =   495
+      Left            =   4560
+      TabIndex        =   22
+      Top             =   3120
+      Width           =   1575
+   End
+   Begin VB.TextBox ID4 
+      Alignment       =   2  'Center
+      Height          =   375
+      Left            =   6360
+      MaxLength       =   4
+      TabIndex        =   20
+      Top             =   2280
+      Width           =   615
+   End
+   Begin VB.TextBox ID3 
+      Alignment       =   2  'Center
+      Height          =   375
+      Left            =   5520
+      MaxLength       =   4
+      TabIndex        =   19
+      Top             =   2280
+      Width           =   615
+   End
+   Begin VB.TextBox ID2 
+      Alignment       =   2  'Center
+      Height          =   375
+      Left            =   4680
+      MaxLength       =   4
+      TabIndex        =   18
+      Top             =   2280
+      Width           =   615
+   End
+   Begin VB.TextBox ID1 
+      Alignment       =   2  'Center
+      Height          =   375
+      Left            =   3840
+      MaxLength       =   4
+      TabIndex        =   17
+      Top             =   2280
+      Width           =   615
+   End
+   Begin VB.ListBox List1 
+      BackColor       =   &H8000000B&
+      BeginProperty Font 
+         Name            =   "微软雅黑"
+         Size            =   10.5
+         Charset         =   134
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   4260
+      Left            =   2040
+      TabIndex        =   0
+      TabStop         =   0   'False
+      Top             =   720
+      Width           =   5895
+   End
    Begin VB.CommandButton PageButton 
       Caption         =   "Page"
       Height          =   495
@@ -87,24 +157,6 @@ Begin VB.Form Form1
       Top             =   720
       Width           =   1695
    End
-   Begin VB.ListBox List1 
-      BackColor       =   &H8000000B&
-      BeginProperty Font 
-         Name            =   "微软雅黑"
-         Size            =   10.5
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   4260
-      Left            =   2070
-      TabIndex        =   0
-      TabStop         =   0   'False
-      Top             =   600
-      Width           =   5895
-   End
    Begin VB.PictureBox Picture1 
       BackColor       =   &H00E0E0E0&
       Height          =   6135
@@ -115,6 +167,14 @@ Begin VB.Form Form1
       TabIndex        =   8
       Top             =   0
       Width           =   9975
+      Begin VB.CommandButton OfficialButton 
+         Caption         =   "Official"
+         Height          =   495
+         Left            =   90
+         TabIndex        =   16
+         Top             =   1290
+         Width           =   1695
+      End
       Begin VB.CommandButton ImportButton 
          Caption         =   "Import"
          Height          =   495
@@ -131,6 +191,7 @@ Begin VB.Form Form1
          ScaleWidth      =   315
          TabIndex        =   14
          Top             =   120
+         Visible         =   0   'False
          Width           =   375
       End
       Begin VB.TextBox Search 
@@ -139,6 +200,7 @@ Begin VB.Form Form1
          TabIndex        =   13
          Text            =   "Text1"
          Top             =   120
+         Visible         =   0   'False
          Width           =   5415
       End
       Begin VB.CommandButton InfoButton 
@@ -156,6 +218,34 @@ Begin VB.Form Form1
          TabIndex        =   9
          Top             =   2490
          Width           =   1695
+      End
+      Begin VB.Label LevelInfos 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "Label1"
+         Height          =   3975
+         Left            =   2040
+         TabIndex        =   23
+         Top             =   120
+         Width           =   7575
+      End
+      Begin VB.Label IDToolTip 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Label1"
+         BeginProperty Font 
+            Name            =   "微软雅黑"
+            Size            =   10.5
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000005&
+         Height          =   375
+         Left            =   3840
+         TabIndex        =   21
+         Top             =   1680
+         Width           =   3255
       End
       Begin VB.Label LevelCounter 
          BackStyle       =   0  'Transparent
@@ -183,6 +273,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+Private Declare Function DeleteUrlCacheEntry Lib "wininet.dll" Alias "DeleteUrlCacheEntryA" (ByVal lpszUrlName As String) As Long
 Private Declare Function URLDownloadToFile Lib "urlmon" Alias "URLDownloadToFileA" (ByVal pCaller As Long, ByVal szURL As String, ByVal szFileName As String, ByVal dwReserved As Long, ByVal lpfnCB As Long) As Long
 Public Function DownloadFile(ByVal StrUrl As String, ByVal strFile As String) As Boolean
    Dim lngReturn As Long
@@ -191,9 +282,8 @@ Public Function DownloadFile(ByVal StrUrl As String, ByVal strFile As String) As
    DoEvents
    If lngReturn = 0 Then DownloadFile = True
 End Function
-
 Public Function PostData(ByVal StrUrl As String, ByVal StrData As String) As Variant
-  On Error GoTo ERR:
+  On Error GoTo Err:
   Dim XMLHTTP As Object
   Dim DataS As String
   Dim DataB() As Byte
@@ -207,16 +297,22 @@ Public Function PostData(ByVal StrUrl As String, ByVal StrData As String) As Var
 PostData = "Completed"
   Set XMLHTTP = Nothing
   Exit Function
-ERR:
+Err:
   PostData = ""
 End Function
+
+
+
+
+
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "3.0"
+Version = "4.0"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
+LevelInfos.BackColor = RGB(240, 252, 250)
    MkDir ConfigFolder
 MkDir LevelFolder
     
@@ -227,6 +323,7 @@ MkDir LevelFolder
     If Locale = "zh-cn" Then
     LocalLevelsButton.Caption = "本地关卡"
     OnlineLevelsButton.Caption = "在线关卡"
+    OfficialButton.Caption = "官方服务器"
     UploadButton.Caption = "上传"
     AboutButton.Caption = "关于"
     InfoButton.Caption = "关卡信息"
@@ -258,7 +355,7 @@ MkDir LevelFolder
     ErrorText(23) = "提取完成！"
     ErrorText(24) = "SMMWE Cloud 玩家上传"
     ErrorText(25) = "个关卡"
-    ErrorText(26) = "加载中"
+    ErrorText(26) = "加载中..."
     ErrorText(27) = "页数"
     ErrorText(28) = "打开 SMMWE Cloud 网页版"
     ErrorText(29) = "检查更新"
@@ -273,6 +370,15 @@ MkDir LevelFolder
     ErrorText(38) = "上传成功！"
     ErrorText(39) = "上传"
     ErrorText(40) = "上传中..."
+    ErrorText(41) = "请输入关卡ID。"
+    ErrorText(42) = " (重试第"
+    ErrorText(43) = "次)"
+    ErrorText(44) = "关卡名字："
+    ErrorText(45) = "赞数："
+    ErrorText(46) = "  踩数："
+    ErrorText(47) = "通关数："
+    ErrorText(48) = "  失败数："
+    ErrorText(49) = "  通关率："
     
     GameLabel(0) = "自动马力欧"
     GameLabel(1) = "一次通过"
@@ -305,7 +411,8 @@ MkDir LevelFolder
     GameLabel(28) = "夜晚"
 ElseIf Locale = "en-us" Then
      LocalLevelsButton.Caption = "Local Level"
-     OnlineLevelsButton.Caption = "Online Level"
+     OnlineLevelsButton.Caption = "SMMWE Cloud"
+    OfficialButton.Caption = "Course World"
      UploadButton.Caption = "Upload Level"
      AboutButton.Caption = "About"
     InfoButton.Caption = "Level Info"
@@ -366,7 +473,7 @@ ElseIf Locale = "en-us" Then
     ErrorText(23) = "Completed!"
     ErrorText(24) = "SMMWE Cloud Users Uploaded"
     ErrorText(25) = " Levels"
-    ErrorText(26) = "Loading"
+    ErrorText(26) = "Loading..."
     ErrorText(27) = "Page"
     ErrorText(28) = "Open SMMWE Cloud Website"
     ErrorText(29) = "Check Update"
@@ -381,9 +488,19 @@ ElseIf Locale = "en-us" Then
     ErrorText(38) = "Upload Completed!"
     ErrorText(39) = "Upload Level"
     ErrorText(40) = "Uploading..."
+    ErrorText(41) = "Please enter the level ID."
+    ErrorText(42) = " (Retry "
+    ErrorText(43) = " times)"
+    ErrorText(44) = "Name: "
+    ErrorText(45) = "Likes: "
+    ErrorText(46) = "  Dislikes: "
+    ErrorText(47) = "Clears:"
+    ErrorText(48) = "  Fails:"
+    ErrorText(49) = "  Clear Rate:"
 ElseIf Locale = "es-es" Then
       LocalLevelsButton.Caption = "Niveles local"
-      OnlineLevelsButton.Caption = "Niveles Mundial"
+      OnlineLevelsButton.Caption = "SMMWE Cloud"
+    OfficialButton.Caption = "Niveles Mundial"
       UploadButton.Caption = "Subir Nivel"
     InfoButton.Caption = "Info de Nivel"
       AboutButton.Caption = "Sobre"
@@ -444,7 +561,7 @@ ElseIf Locale = "es-es" Then
      ErrorText(23) = "Completado!"
      ErrorText(24) = "SMMWE Cloud subidos"
      ErrorText(25) = " Niveles"
-     ErrorText(26) = "Cargando"
+     ErrorText(26) = "Cargando..."
     ErrorText(27) = "Pagina"
     ErrorText(28) = "Sitio web abierto SMMWE Cloud"
     ErrorText(29) = "Buscar actualizacion"
@@ -459,6 +576,15 @@ ElseIf Locale = "es-es" Then
     ErrorText(38) = "Subir completado!"
     ErrorText(39) = "Subir Nivel"
     ErrorText(40) = "Subiendo..."
+    ErrorText(41) = "Ingrese el ID de nivel."
+    ErrorText(42) = " (Reintentar "
+    ErrorText(43) = " veces)"
+    ErrorText(44) = "Nombre: "
+    ErrorText(45) = "Gustos: "
+    ErrorText(46) = "  Disgustos: "
+    ErrorText(47) = "Victorias:"
+    ErrorText(48) = "  Muertes:"
+    ErrorText(49) = "  Tasa clara:"
     End If
     Close #3
     End If
@@ -469,6 +595,8 @@ ElseIf Locale = "es-es" Then
     ImportButton.Caption = ErrorText(31)
 '删除在线关卡列表缓存
     If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
+    If CheckFileExists(ConfigFolder & "\SMMWEParseTemp.json") = True Then Kill ConfigFolder & "\SMMWEParseTemp.json"
+    If CheckFileExists(ConfigFolder & "\SMMWEAuthorImg.png") = True Then Kill ConfigFolder & "\SMMWEAuthorImg.png"
 '处理界面
     Form1.Caption = Title & " - " & LocalLevelsButton.Caption
 DeleteButton.Visible = True
@@ -482,7 +610,17 @@ List1.Height = 5340
 PageButton.Visible = False
 SearchButton.Visible = False
 ImportButton.Visible = True
+LevelCounter.Visible = True
+List1.Visible = True
 Search.Visible = False
+ID1.Visible = False
+ID2.Visible = False
+ID3.Visible = False
+ID4.Visible = False
+IDToolTip.Visible = False
+IDConfirm.Visible = False
+LevelInfos.Visible = False
+Download2Button.Visible = False
 
 Search.Text = ErrorText(30)
 Search.ForeColor = RGB(130, 130, 130)
@@ -502,6 +640,9 @@ locallevel(I) = List1.List(I)
 Next
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
+
+
+
 Private Sub LocalLevelsButton_click()
 '如果没关卡就跳过rt9
 On Error Resume Next
@@ -516,6 +657,16 @@ ExtractButton.Visible = True
 SearchButton.Visible = False
 PageButton.Visible = False
 Search.Visible = False
+List1.Visible = True
+LevelCounter.Visible = True
+ID1.Visible = False
+ID2.Visible = False
+ID3.Visible = False
+IDToolTip.Visible = False
+ID4.Visible = False
+IDConfirm.Visible = False
+Download2Button.Visible = False
+LevelInfos.Visible = False
     Form1.Caption = Title & " - " & LocalLevelsButton.Caption
 List1.Top = 120
 List1.Height = 5340
@@ -533,6 +684,8 @@ locallevel(I) = List1.List(I)
 Next
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
+
+
 Private Sub OnlineLevelsButton_Click()
 '在线关卡按钮
     If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
@@ -551,6 +704,16 @@ UploadButton.Visible = False
 PageButton.Visible = True
 Search.Visible = True
 SearchButton.Visible = True
+List1.Visible = True
+LevelCounter.Visible = True
+ID1.Visible = False
+ID2.Visible = False
+ID3.Visible = False
+ID4.Visible = False
+IDToolTip.Visible = False
+IDConfirm.Visible = False
+LevelInfos.Visible = False
+Download2Button.Visible = False
 List1.Top = 600
 Search.Text = ErrorText(30)
 Search.ForeColor = RGB(130, 130, 130)
@@ -881,4 +1044,147 @@ List1.Clear
     Next I
     Close #1
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
+End Sub
+
+Private Sub OfficialButton_Click()
+'官方API
+    Form1.Caption = Title & " - " & OfficialButton.Caption
+DeleteButton.Visible = False
+InfoButton.Visible = False
+RenameButton.Visible = False
+DownloadButton.Visible = False
+UploadButton.Visible = False
+ExtractButton.Visible = False
+PageButton.Visible = False
+SearchButton.Visible = False
+ImportButton.Visible = False
+List1.Visible = False
+Search.Visible = False
+LevelCounter.Visible = False
+ID1.Visible = True
+ID2.Visible = True
+ID3.Visible = True
+ID4.Visible = True
+IDToolTip.Visible = True
+IDConfirm.Visible = True
+LevelInfos.Visible = False
+IDToolTip.Caption = ErrorText(41)
+ID1.SetFocus
+End Sub
+Private Sub IDConfirm_Click()
+'官方API
+If ID4.Text <> "" Then
+ID1.Visible = False
+ID2.Visible = False
+ID3.Visible = False
+ID4.Visible = False
+IDConfirm.Visible = False
+Dim LevelParseTmp As String, RetryTimer As Integer, ExitLoop As Boolean, TmpDownloadURL As String
+ExitLoop = False
+LevelID = ID1.Text & "-" & ID2.Text & "-" & ID3.Text & "-" & ID4.Text
+RetryTimer = 0
+Dim APIKey, APIOwner, DiscordCDNURL As String
+If Rnd() > 0.7 Then
+APIKey = APIKey1
+APIOwner = APIOwner1
+Else
+APIKey = APIKey2
+APIOwner = APIOwner2
+End If
+If Locale = "zh-cn" Then
+DiscordCDNURL = "https://discordcdnapi.smmwe.ml/"
+Else
+DiscordCDNURL = "https://cdn.discordapp.com/"
+End If
+Do
+IDToolTip = ErrorText(26) & ErrorText(42) & CStr(RetryTimer) & ErrorText(43)
+TmpDownloadURL = "https://smmwe.online/api/request?type=stage&by=id&owner=" & APIOwner & "&api_key=" & APIKey & "&id=" & LevelID
+Debug.Print DownloadFile(TmpDownloadURL, ConfigFolder & "\SMMWEParseTemp.json")
+Open ConfigFolder & "\SMMWEParseTemp.json" For Input As #12
+Line Input #12, LevelParseTmp
+Close #12
+Debug.Print TmpDownloadURL
+If Join(Filter(Split(LevelParseTmp, ","), "error_type"), "") = "" Then ExitLoop = True
+Kill ConfigFolder & "\SMMWEParseTemp.json"
+DeleteUrlCacheEntry (TmpDownloadURL)
+Sleep (500)
+DoEvents
+RetryTimer = RetryTimer + 1
+Loop Until ExitLoop = True
+
+Dim Clears As String, Fails As String
+Clears = Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "victorias" & Chr(34)), ""), Chr(34), ""), "victorias:", "")
+Fails = Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "muertes" & Chr(34)), ""), Chr(34), ""), "muertes:", "")
+LevelInfos.Visible = True
+LevelTempName = Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "name" & Chr(34)), ""), Chr(34), ""), "result:{name:", "")
+LevelInfos.Caption = ErrorText(44) & LevelTempName
+LevelInfos.Caption = LevelInfos.Caption & vbCrLf & ErrorText(12) & Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "author" & Chr(34)), ""), Chr(34), ""), "author:", "")
+LevelInfos.Caption = LevelInfos.Caption & vbCrLf & ErrorText(47) & Clears
+LevelInfos.Caption = LevelInfos.Caption & ErrorText(48) & Fails
+ClearRate = CInt(Clears) + CInt(Fails)
+ClearRate = CInt(Clears) / ClearRate
+ClearRate = ClearRate * 100
+LevelInfos.Caption = LevelInfos.Caption & ErrorText(49) & CStr(Round(ClearRate, 2)) & "%"
+LevelInfos.Caption = LevelInfos.Caption & vbCrLf & vbCrLf & ErrorText(45) & Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "likes" & Chr(34)), ""), Chr(34), ""), "likes:", "")
+LevelInfos.Caption = LevelInfos.Caption & ErrorText(46) & Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "dislikes" & Chr(34)), ""), Chr(34), ""), "dislikes:", "")
+Dim GameStyle2, GameLabel3 As String
+GameStyle2 = Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "apariencia" & Chr(34)), ""), Chr(34), ""), "apariencia:", "")
+GameLabel3 = Replace(Replace(Join(Filter(Split(LevelParseTmp, ","), Chr(34) & "etiquetas" & Chr(34)), ""), Chr(34), ""), "etiquetas:", "")
+    If GameStyle2 = " 0" Then GameStyle2 = "SMB1"
+    If GameStyle2 = " 1" Then GameStyle2 = "SMB3"
+    If GameStyle2 = " 2" Then GameStyle2 = "SMW"
+    If GameStyle2 = " 3" Then GameStyle2 = "NSMBU"
+LevelInfos.Caption = LevelInfos.Caption & vbCrLf & ErrorText(14) & GameStyle2 & "  " & ErrorText(15) & GameLabel3
+Download2Button.Visible = True
+    Download2Button.Caption = ErrorText(4)
+End If
+End Sub
+Private Sub Download2Button_Click()
+If CheckFileExists(ConfigFolder & "\SMMWEParseTemp.json") = True Then Kill ConfigFolder & "\SMMWEParseTemp.json"
+    Download2Button.Caption = ErrorText(5)
+    Dim ExitLoop2 As Boolean, RetryTimer2 As Integer, TmpDownloadUrl2 As String
+    RetryTimer2 = 0
+    ExitLoop2 = False
+    TmpDownloadUrl2 = "https://smmwe.online/api/request?type=stage&by=file&owner=530177024614989824&api_key=9311a9ef9130d88cb6d1620107e5932561f881ae&id=" & LevelID
+    DoEvents
+Do
+Download2Button.Caption = ErrorText(42) & CStr(RetryTimer2) & ErrorText(43)
+Debug.Print DownloadFile(TmpDownloadUrl2, ConfigFolder & "\SMMWEParseTemp.json")
+Dim LevelParseTmp2 As String
+Open ConfigFolder & "\SMMWEParseTemp.json" For Input As #13
+Line Input #13, LevelParseTmp2
+Close #13
+If Join(Filter(Split(LevelParseTmp, ","), "error_type"), "") = "" Then ExitLoop2 = True
+Kill ConfigFolder & "\SMMWEParseTemp.json"
+DeleteUrlCacheEntry (TmpDownloadUrl2)
+Sleep (500)
+DoEvents
+RetryTimer2 = RetryTimer2 + 1
+Loop Until ExitLoop2 = True
+
+LevelParseTmp2 = Replace(Replace(Replace(LevelParseTmp2, Chr(34), ""), "{data:", ""), "}", "")
+Open LevelFolder & "\" & LevelTempName & ".swe" For Output As #14
+Print #14, LevelParseTmp2;
+Close #14
+    Download2Button.Caption = ErrorText(6)
+End Sub
+Private Sub ID1_Change()
+ID1.Text = UCase(ID1.Text)
+ID1.SelStart = Len(ID1.Text)
+If Len(ID1.Text) = 4 Then ID2.SetFocus
+End Sub
+Private Sub ID2_Change()
+ID2.Text = UCase(ID2.Text)
+ID2.SelStart = Len(ID2.Text)
+If Len(ID2.Text) = 4 Then ID3.SetFocus
+End Sub
+Private Sub ID3_Change()
+ID3.Text = UCase(ID3.Text)
+ID3.SelStart = Len(ID3.Text)
+If Len(ID3.Text) = 4 Then ID4.SetFocus
+End Sub
+Private Sub ID4_Change()
+ID4.Text = UCase(ID4.Text)
+ID4.SelStart = Len(ID4.Text)
+If Len(ID4.Text) = 4 Then IDConfirm.SetFocus
 End Sub
