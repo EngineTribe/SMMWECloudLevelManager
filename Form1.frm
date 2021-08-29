@@ -292,7 +292,7 @@ Public Function PostData(ByVal StrUrl As String, ByVal StrData As String) As Var
   XMLHTTP.send (StrData)
   Do Until XMLHTTP.ReadyState = 4
     DoEvents
-    Sleep (5)
+    Sleep (10)
   Loop
 PostData = "Completed"
   Set XMLHTTP = Nothing
@@ -308,7 +308,7 @@ End Function
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "4.0"
+Version = "4.0fix1"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
@@ -1154,7 +1154,7 @@ Dim LevelParseTmp2 As String
 Open ConfigFolder & "\SMMWEParseTemp.json" For Input As #13
 Line Input #13, LevelParseTmp2
 Close #13
-If Join(Filter(Split(LevelParseTmp, ","), "error_type"), "") = "" Then ExitLoop2 = True
+If Join(Filter(Split(LevelParseTmp2, ","), "error_type"), "") = "" Then ExitLoop2 = True
 Kill ConfigFolder & "\SMMWEParseTemp.json"
 DeleteUrlCacheEntry (TmpDownloadUrl2)
 Sleep (500)
