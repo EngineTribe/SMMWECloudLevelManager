@@ -11,12 +11,14 @@ Public PageNumber As Integer
 Public PageNumberMax As Integer
 Public Title As String
 Public Version As String
-Public ErrorText(49) As String
+Public ErrorText(50) As String
 Public GameLabel(28) As String
 Public Const APIOwner1 = "728005293665026189"
 Public Const APIOwner2 = "530177024614989824"
 Public Const APIKey1 = "882fa39bc11c46db98c9f9a46fe837ae72ffba24"
 Public Const APIKey2 = "9311a9ef9130d88cb6d1620107e5932561f881ae"
+Public Page1Levels As Integer
+Public LevelNameTmp As String
 Public Function CheckFileExists(FilePath As String) As Boolean
     On Error GoTo Err
     If Len(FilePath) < 2 Then CheckFileExists = False: Exit Function

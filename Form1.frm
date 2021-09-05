@@ -304,11 +304,10 @@ End Function
 
 
 
-
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "4.0fix1"
+Version = "4.1"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
@@ -379,7 +378,7 @@ MkDir LevelFolder
     ErrorText(47) = "通关数："
     ErrorText(48) = "  失败数："
     ErrorText(49) = "  通关率："
-    
+    ErrorText(50) = "SMMWE Cloud 目前正在维护，新上传的关卡不会在列表中显示。" & vbCrLf & "但在维护的这段时间内，你可以通过这个临时链接下载本关卡。"
     GameLabel(0) = "自动马力欧"
     GameLabel(1) = "一次通过"
     GameLabel(2) = "多人对战"
@@ -497,6 +496,7 @@ ElseIf Locale = "en-us" Then
     ErrorText(47) = "Clears:"
     ErrorText(48) = "  Fails:"
     ErrorText(49) = "  Clear Rate:"
+    ErrorText(50) = "SMMWE Cloud is currently under maintenance. " & vbCrLf & "The newly uploaded levels will not be displayed in the list." & vbCrLf & "However, during the maintenance period, " & vbCrLf & "you can download this level through this temporary link."
 ElseIf Locale = "es-es" Then
       LocalLevelsButton.Caption = "Niveles local"
       OnlineLevelsButton.Caption = "SMMWE Cloud"
@@ -585,6 +585,7 @@ ElseIf Locale = "es-es" Then
     ErrorText(47) = "Victorias:"
     ErrorText(48) = "  Muertes:"
     ErrorText(49) = "  Tasa clara:"
+    ErrorText(50) = "SMMWE Cloud se encuentra actualmente en mantenimiento. " & vbCrLf & "Los niveles recien cargados no se mostraran en la lista." & vbCrLf & "Sin embargo, durante el período de mantenimiento," & vbCrLf & " puede descargar este nivel a traves de este enlace temporal."
     End If
     Close #3
     End If
@@ -748,6 +749,7 @@ List1.Clear
     Next I
     Close #1
     PageButton.Caption = ErrorText(27) & " " & CStr(PageNumber) & "/" & CStr(PageNumberMax)
+    If PageNumber = 1 Then Page1Levels = List1.ListCount
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 '导入 调用资源管理器
@@ -904,6 +906,11 @@ If List1.Text <> "" Then
     End If
     UploadButton.Caption = ErrorText(39)
     MsgBox ErrorText(38)
+    If Page1Levels > 194 Then
+    frmUploadErr.Show
+    Else
+    Debug.Print "lessthan194"
+    End If
 End If
 Exit Sub
 Err6:
@@ -1045,6 +1052,8 @@ List1.Clear
     Close #1
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
+
+
 
 Private Sub OfficialButton_Click()
 '官方API
