@@ -22,11 +22,19 @@ Begin VB.Form Form1
    MinButton       =   0   'False
    ScaleHeight     =   6105
    ScaleWidth      =   9960
+   Begin VB.CommandButton CopyLinkButton 
+      Caption         =   "CopyLink"
+      Height          =   495
+      Left            =   8160
+      TabIndex        =   24
+      Top             =   720
+      Width           =   1695
+   End
    Begin VB.CommandButton Download2Button 
       Caption         =   "OK"
       Height          =   495
       Left            =   4530
-      TabIndex        =   24
+      TabIndex        =   23
       Top             =   4200
       Width           =   1575
    End
@@ -34,7 +42,7 @@ Begin VB.Form Form1
       Caption         =   "OK"
       Height          =   495
       Left            =   4560
-      TabIndex        =   22
+      TabIndex        =   21
       Top             =   3120
       Width           =   1575
    End
@@ -43,7 +51,7 @@ Begin VB.Form Form1
       Height          =   375
       Left            =   6360
       MaxLength       =   4
-      TabIndex        =   20
+      TabIndex        =   19
       Top             =   2280
       Width           =   615
    End
@@ -52,7 +60,7 @@ Begin VB.Form Form1
       Height          =   375
       Left            =   5520
       MaxLength       =   4
-      TabIndex        =   19
+      TabIndex        =   18
       Top             =   2280
       Width           =   615
    End
@@ -61,7 +69,7 @@ Begin VB.Form Form1
       Height          =   375
       Left            =   4680
       MaxLength       =   4
-      TabIndex        =   18
+      TabIndex        =   17
       Top             =   2280
       Width           =   615
    End
@@ -70,7 +78,7 @@ Begin VB.Form Form1
       Height          =   375
       Left            =   3840
       MaxLength       =   4
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   2280
       Width           =   615
    End
@@ -91,14 +99,6 @@ Begin VB.Form Form1
       TabStop         =   0   'False
       Top             =   720
       Width           =   5895
-   End
-   Begin VB.CommandButton PageButton 
-      Caption         =   "Page"
-      Height          =   495
-      Left            =   8160
-      TabIndex        =   12
-      Top             =   720
-      Width           =   1695
    End
    Begin VB.CommandButton AboutButton 
       Caption         =   "About"
@@ -171,7 +171,7 @@ Begin VB.Form Form1
          Caption         =   "Official"
          Height          =   495
          Left            =   90
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   1290
          Width           =   1695
       End
@@ -179,7 +179,7 @@ Begin VB.Form Form1
          Caption         =   "Import"
          Height          =   495
          Left            =   8130
-         TabIndex        =   15
+         TabIndex        =   14
          Top             =   1890
          Width           =   1695
       End
@@ -189,7 +189,7 @@ Begin VB.Form Form1
          Picture         =   "Form1.frx":A2F4
          ScaleHeight     =   315
          ScaleWidth      =   315
-         TabIndex        =   14
+         TabIndex        =   13
          Top             =   120
          Visible         =   0   'False
          Width           =   375
@@ -197,7 +197,7 @@ Begin VB.Form Form1
       Begin VB.TextBox Search 
          Height          =   375
          Left            =   2040
-         TabIndex        =   13
+         TabIndex        =   12
          Text            =   "Text1"
          Top             =   120
          Visible         =   0   'False
@@ -224,7 +224,7 @@ Begin VB.Form Form1
          Caption         =   "Label1"
          Height          =   3975
          Left            =   2040
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   120
          Width           =   7575
       End
@@ -243,7 +243,7 @@ Begin VB.Form Form1
          ForeColor       =   &H80000005&
          Height          =   375
          Left            =   3840
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   1680
          Width           =   3255
       End
@@ -304,14 +304,16 @@ End Function
 
 
 
+
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "4.1"
+Version = "4.2"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
 LevelInfos.BackColor = RGB(240, 252, 250)
+LocalLevelsButton.SetFocus
    MkDir ConfigFolder
 MkDir LevelFolder
     
@@ -352,13 +354,13 @@ MkDir LevelFolder
     ErrorText(21) = "快速"
     ErrorText(22) = "提取"
     ErrorText(23) = "提取完成！"
-    ErrorText(24) = "SMMWE Cloud 玩家上传"
+    ErrorText(24) = "复制链接"
     ErrorText(25) = "个关卡"
     ErrorText(26) = "加载中..."
     ErrorText(27) = "页数"
     ErrorText(28) = "打开 SMMWE Cloud 网页版"
     ErrorText(29) = "检查更新"
-    ErrorText(30) = "在本页中搜索..."
+    ErrorText(30) = "搜索关卡..."
     ErrorText(31) = "导入"
     ErrorText(32) = "导入完成！"
     ErrorText(33) = "关卡"
@@ -378,7 +380,7 @@ MkDir LevelFolder
     ErrorText(47) = "通关数："
     ErrorText(48) = "  失败数："
     ErrorText(49) = "  通关率："
-    ErrorText(50) = "SMMWE Cloud 目前正在维护，新上传的关卡不会在列表中显示。" & vbCrLf & "但在维护的这段时间内，你可以通过这个临时链接下载本关卡。"
+    ErrorText(50) = "因为取消分页，所以加载时间较长，请耐心等候..."
     GameLabel(0) = "自动马力欧"
     GameLabel(1) = "一次通过"
     GameLabel(2) = "多人对战"
@@ -470,13 +472,13 @@ ElseIf Locale = "en-us" Then
     ErrorText(21) = "Fast"
     ErrorText(22) = "Export"
     ErrorText(23) = "Completed!"
-    ErrorText(24) = "SMMWE Cloud Users Uploaded"
+    ErrorText(24) = "Copy Link"
     ErrorText(25) = " Levels"
     ErrorText(26) = "Loading..."
     ErrorText(27) = "Page"
     ErrorText(28) = "Open SMMWE Cloud Website"
     ErrorText(29) = "Check Update"
-    ErrorText(30) = "Search in this page..."
+    ErrorText(30) = "Search level ..."
     ErrorText(31) = "Import"
     ErrorText(32) = "Completed!"
     ErrorText(33) = "Level"
@@ -496,7 +498,7 @@ ElseIf Locale = "en-us" Then
     ErrorText(47) = "Clears:"
     ErrorText(48) = "  Fails:"
     ErrorText(49) = "  Clear Rate:"
-    ErrorText(50) = "SMMWE Cloud is currently under maintenance. " & vbCrLf & "The newly uploaded levels will not be displayed in the list." & vbCrLf & "However, during the maintenance period, " & vbCrLf & "you can download this level through this temporary link."
+    ErrorText(50) = "Because the pagination is cancelled, it takes a long time to load, please be patient..."
 ElseIf Locale = "es-es" Then
       LocalLevelsButton.Caption = "Niveles local"
       OnlineLevelsButton.Caption = "SMMWE Cloud"
@@ -559,13 +561,13 @@ ElseIf Locale = "es-es" Then
     ErrorText(21) = "Rapido"
     ErrorText(22) = "Exportar"
      ErrorText(23) = "Completado!"
-     ErrorText(24) = "SMMWE Cloud subidos"
+     ErrorText(24) = "Copiar Link"
      ErrorText(25) = " Niveles"
      ErrorText(26) = "Cargando..."
     ErrorText(27) = "Pagina"
     ErrorText(28) = "Sitio web abierto SMMWE Cloud"
     ErrorText(29) = "Buscar actualizacion"
-    ErrorText(30) = "Buscar en esta pagina..."
+    ErrorText(30) = "Buscar nivel ..."
     ErrorText(31) = "Importar"
     ErrorText(32) = "Completado!"
     ErrorText(33) = "Nivel"
@@ -585,7 +587,7 @@ ElseIf Locale = "es-es" Then
     ErrorText(47) = "Victorias:"
     ErrorText(48) = "  Muertes:"
     ErrorText(49) = "  Tasa clara:"
-    ErrorText(50) = "SMMWE Cloud se encuentra actualmente en mantenimiento. " & vbCrLf & "Los niveles recien cargados no se mostraran en la lista." & vbCrLf & "Sin embargo, durante el período de mantenimiento," & vbCrLf & " puede descargar este nivel a traves de este enlace temporal."
+    ErrorText(50) = "Debido a que la paginacion esta cancelada, tarda mucho en cargarse, tenga paciencia ..."
     End If
     Close #3
     End If
@@ -594,6 +596,7 @@ ElseIf Locale = "es-es" Then
     DeleteButton.Caption = ErrorText(9)
     ExtractButton.Caption = ErrorText(22)
     ImportButton.Caption = ErrorText(31)
+    CopyLinkButton.Caption = ErrorText(24)
 '删除在线关卡列表缓存
     If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
     If CheckFileExists(ConfigFolder & "\SMMWEParseTemp.json") = True Then Kill ConfigFolder & "\SMMWEParseTemp.json"
@@ -608,8 +611,8 @@ UploadButton.Visible = True
 ExtractButton.Visible = True
 List1.Top = 120
 List1.Height = 5340
-PageButton.Visible = False
 SearchButton.Visible = False
+CopyLinkButton.Visible = False
 ImportButton.Visible = True
 LevelCounter.Visible = True
 List1.Visible = True
@@ -654,9 +657,9 @@ ImportButton.Visible = True
 InfoButton.Visible = True
 DownloadButton.Visible = False
 UploadButton.Visible = True
+CopyLinkButton.Visible = False
 ExtractButton.Visible = True
 SearchButton.Visible = False
-PageButton.Visible = False
 Search.Visible = False
 List1.Visible = True
 LevelCounter.Visible = True
@@ -690,19 +693,20 @@ End Sub
 Private Sub OnlineLevelsButton_Click()
 '在线关卡按钮
     If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
-LevelSourceUrl = "https://cloud.smmwe.ml/main/"
+LevelSourceUrl = "https://apiv2.smmwe.ml/smmweroot/"
 
     Form1.Caption = Title & " - " & OnlineLevelsButton.Caption
 List1.Clear
 List1.AddItem ErrorText(26)
+List1.AddItem ErrorText(50)
 DeleteButton.Visible = False
 RenameButton.Visible = False
 ExtractButton.Visible = False
+CopyLinkButton.Visible = True
 DownloadButton.Visible = True
 InfoButton.Visible = False
 ImportButton.Visible = False
 UploadButton.Visible = False
-PageButton.Visible = True
 Search.Visible = True
 SearchButton.Visible = True
 List1.Visible = True
@@ -715,25 +719,19 @@ IDToolTip.Visible = False
 IDConfirm.Visible = False
 LevelInfos.Visible = False
 Download2Button.Visible = False
+SearchButton.SetFocus
 List1.Top = 600
 Search.Text = ErrorText(30)
 Search.ForeColor = RGB(130, 130, 130)
 List1.Height = 4860
-'拉取页数
-PageNumber = 1
+LevelCounter.Visible = False
 DoEvents
-    Debug.Print DownloadFile("https://cloud.smmwe.ml/main/?filename", ConfigFolder & "\SMMWECloudLevelList.txt")
-    Dim pagelist As String
-    Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #6
-    Line Input #6, pagelist
-    onlinepage = Split(pagelist, vbLf)
-    onlinepage = Filter(onlinepage, "Levels Page")
-    PageNumberMax = UBound(onlinepage) - LBound(onlinepage) + 2
-    Close #6
+    Debug.Print DownloadFile("https://apiv2.smmwe.ml/smmweroot/", ConfigFolder & "\SMMWECloudLevelList.txt")
     '拉取关卡
     Dim filelist As String
     Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
     Line Input #1, filelist
+    filelist = Replace(filelist, "<meta charset=" & Chr(34) & "UTF-8" & Chr(34) & ">", "")
     OnlineLevel = Split(filelist, vbLf)
     OnlineLevel = Filter(OnlineLevel, ".swe")
     onlineleveltmp = Join(OnlineLevel, vbCrLf)
@@ -748,8 +746,7 @@ List1.Clear
         List1.AddItem OnlineLevel(I)
     Next I
     Close #1
-    PageButton.Caption = ErrorText(27) & " " & CStr(PageNumber) & "/" & CStr(PageNumberMax)
-    If PageNumber = 1 Then Page1Levels = List1.ListCount
+LevelCounter.Visible = True
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 '导入 调用资源管理器
@@ -796,7 +793,12 @@ If List1.Text <> "" Then
     DownloadButton.Caption = ErrorText(4)
 End If
 End Sub
-
+'复制链接
+Private Sub CopyLinkButton_Click()
+If List1.Text <> "" Then
+Clipboard.SetText ("https://apiv2.smmwe.ml/smmweroot/" & Replace(List1.Text, " ", "%20") & ".swe")
+End If
+End Sub
 
 '重命名
 Private Sub RenameButton_Click()
@@ -836,10 +838,13 @@ Search.Text = ""
 Search.ForeColor = RGB(0, 0, 0)
 End If
 End Sub
-
 Private Sub SearchButton_Click()
 '执行搜索
+
 If Search.Text <> (ErrorText(30)) Then
+List1.Clear
+List1.AddItem ErrorText(26)
+List1.AddItem ErrorText(50)
 ReDim OnlineLevelSearched(0 To List1.ListCount - 1)
 For I = 0 To List1.ListCount - 1
 OnlineLevelSearched(I) = List1.List(I)
@@ -856,6 +861,8 @@ End If
 If Search.Text = "" Then
     Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
     Line Input #1, filelist
+    
+    filelist = Replace(filelist, "<meta charset=" & Chr(34) & "UTF-8" & Chr(34) & ">", "")
     OnlineLevel = Split(filelist, vbLf)
     OnlineLevel = Filter(OnlineLevel, ".swe")
     onlineleveltmp = Join(OnlineLevel, vbCrLf)
@@ -882,7 +889,7 @@ If MsgBox(ErrorText(36) & List1.Text & ErrorText(37), vbOKCancel + vbExclamation
 UploadButton.Caption = ErrorText(40)
 CanUpload = False
 If List1.Text <> "" Then
-    Debug.Print DownloadFile("https://cloud.smmwe.ml/main/" & Replace(List1.Text, " ", "%20") & ".swe", ConfigFolder & "\" & List1.Text & ".tmp")
+    Debug.Print DownloadFile("https://apiv2.smmwe.ml/smmweroot/" & Replace(List1.Text, " ", "%20") & ".swe", ConfigFolder & "\" & List1.Text & ".tmp")
     If CheckFileExists(ConfigFolder & "\" & List1.Text & ".tmp") = False Then
         CanUpload = True
     Else
@@ -897,20 +904,16 @@ If List1.Text <> "" Then
         Line Input #8, LevelContentTmp
         Close #8
     If CanUpload = True Then
-        Debug.Print PostData("https://api.smmwe.ml/?upload=" & Replace(List1.Text, " ", "%20") & ".swe&key=yidaozhan-gq-franyer-farias", LevelContentTmp)
+        Debug.Print PostData("https://apiv2.smmwe.ml/smmweroot/?upload=" & Replace(List1.Text, " ", "%20") & ".swe&key=yidaozhan-gq-franyer-farias-apiv2", LevelContentTmp)
     Else
         Dim LevelMaker As String
         LevelMaker = Replace(Join(Filter(Split(LevelContentTmp, ","), Chr(34) & "user" & Chr(34)), ""), Chr(34) & "user" & Chr(34) & ": ", "")
         LevelMaker = Replace(LevelMaker, Chr(34), "")
-        Debug.Print PostData("https://api.smmwe.ml/?upload=" & Replace(List1.Text, " ", "%20") & " By" & LevelMaker & ".swe&key=yidaozhan-gq-franyer-farias", LevelContentTmp)
+        Debug.Print PostData("https://apiv2.smmwe.ml/smmweroot/?upload=" & Replace(List1.Text, " ", "%20") & " By" & LevelMaker & ".swe&key=yidaozhan-gq-franyer-farias-apiv2", LevelContentTmp)
     End If
     UploadButton.Caption = ErrorText(39)
     MsgBox ErrorText(38)
-    If Page1Levels > 194 Then
-    frmUploadErr.Show
-    Else
-    Debug.Print "lessthan194"
-    End If
+DeleteUrlCacheEntry ("https://apiv2.smmwe.ml/smmweroot/")
 End If
 Exit Sub
 Err6:
@@ -1020,39 +1023,6 @@ FileCopy LevelFolder & "\" & List1.Text & ".swe", DesktopFolder & "\" & List1.Te
     ExtractButton.Caption = ErrorText(22)
 End If
 End Sub
-Private Sub PageButton_Click()
-'加载页数
-PageNumber = PageNumber + 1
-If PageNumber = PageNumberMax + 1 Then PageNumber = 1
-If PageNumber = 1 Then
-LevelSourceUrl = "https://cloud.smmwe.ml/main/"
-Else
-LevelSourceUrl = "https://cloud.smmwe.ml/main/Levels%20Page%20" & CStr(PageNumber - 1) & "/"
-End If
-DoEvents
-    PageButton.Caption = ErrorText(27) & " " & CStr(PageNumber) & "/" & CStr(PageNumberMax)
-    '拉取关卡
-    Debug.Print DownloadFile(LevelSourceUrl & "?filename", ConfigFolder & "\SMMWECloudLevelList.txt")
-    Dim filelist As String
-    Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
-    Line Input #1, filelist
-    OnlineLevel = Split(filelist, vbLf)
-    OnlineLevel = Filter(OnlineLevel, ".swe")
-    onlineleveltmp = Join(OnlineLevel, vbCrLf)
-    onlineleveltmp = Replace(onlineleveltmp, ".swe", "")
-    OnlineLevel = Split(onlineleveltmp, vbCrLf)
-    Dim tmp2 As Integer
-    tmp2 = UBound(OnlineLevel) - LBound(OnlineLevel)
-    Dim s As Long, I As Long
-    
-List1.Clear
-    For I = 0 To tmp2
-        List1.AddItem OnlineLevel(I)
-    Next I
-    Close #1
-LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
-End Sub
-
 
 
 Private Sub OfficialButton_Click()
@@ -1064,9 +1034,9 @@ RenameButton.Visible = False
 DownloadButton.Visible = False
 UploadButton.Visible = False
 ExtractButton.Visible = False
-PageButton.Visible = False
 SearchButton.Visible = False
 ImportButton.Visible = False
+CopyLinkButton.Visible = False
 List1.Visible = False
 Search.Visible = False
 LevelCounter.Visible = False
