@@ -9,9 +9,10 @@ Public LevelTempName As String
 Public RenameError As String
 Public PageNumber As Integer
 Public PageNumberMax As Integer
+Public IsEnableCache As Integer
 Public Title As String
 Public Version As String
-Public ErrorText(50) As String
+Public ErrorText(60) As String
 Public GameLabel(28) As String
 Public Const APIOwner1 = "728005293665026189"
 Public Const APIOwner2 = "530177024614989824"

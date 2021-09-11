@@ -22,6 +22,22 @@ Begin VB.Form Form1
    MinButton       =   0   'False
    ScaleHeight     =   6105
    ScaleWidth      =   9960
+   Begin VB.CommandButton SettingsButton 
+      Caption         =   "Settings"
+      Height          =   495
+      Left            =   120
+      TabIndex        =   26
+      Top             =   4800
+      Width           =   1695
+   End
+   Begin VB.CommandButton CommentButton 
+      Caption         =   "Comment"
+      Height          =   495
+      Left            =   8160
+      TabIndex        =   25
+      Top             =   1320
+      Width           =   1695
+   End
    Begin VB.CommandButton CopyLinkButton 
       Caption         =   "CopyLink"
       Height          =   495
@@ -308,7 +324,7 @@ End Function
 Private Sub Form_Load()
 '如果没关卡就跳过rt9
 On Error Resume Next
-Version = "4.2"
+Version = "4.3"
 '设列表背景
 List1.BackColor = RGB(240, 252, 250)
 Search.BackColor = RGB(240, 252, 250)
@@ -317,9 +333,13 @@ LocalLevelsButton.SetFocus
    MkDir ConfigFolder
 MkDir LevelFolder
     
-    If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then
-    Open ConfigFolder & "\SMMWECloudLocale.cfg" For Input As #3
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then Kill ConfigFolder & "\SMMWECloudLocale.cfg"
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelManager.cfg") = True Then
+    Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Input As #3
+    Dim TempVal As String
     Line Input #3, Locale
+    Line Input #3, TempVal
+    IsEnableCache = CInt(TempVal)
 '加载语言
     If Locale = "zh-cn" Then
     LocalLevelsButton.Caption = "本地关卡"
@@ -381,6 +401,17 @@ MkDir LevelFolder
     ErrorText(48) = "  失败数："
     ErrorText(49) = "  通关率："
     ErrorText(50) = "因为取消分页，所以加载时间较长，请耐心等候..."
+    ErrorText(51) = "关卡评论"
+    ErrorText(52) = "设置"
+    ErrorText(53) = "启用缓存"
+    ErrorText(54) = "保存"
+    ErrorText(55) = "语言"
+    ErrorText(56) = "简体中文"
+    ErrorText(57) = "英语"
+    ErrorText(58) = "西班牙语"
+    ErrorText(59) = "使用 curl 下载"
+    ErrorText(60) = "使用 curl 上传"
+    
     GameLabel(0) = "自动马力欧"
     GameLabel(1) = "一次通过"
     GameLabel(2) = "多人对战"
@@ -499,6 +530,16 @@ ElseIf Locale = "en-us" Then
     ErrorText(48) = "  Fails:"
     ErrorText(49) = "  Clear Rate:"
     ErrorText(50) = "Because the pagination is cancelled, it takes a long time to load, please be patient..."
+    ErrorText(51) = "Comments"
+    ErrorText(52) = "Settings"
+    ErrorText(53) = "Enable caching"
+    ErrorText(54) = "Save"
+    ErrorText(55) = "Language"
+    ErrorText(56) = "S.Chinese"
+    ErrorText(57) = "English"
+    ErrorText(58) = "Spanish"
+    ErrorText(59) = "Use curl to download"
+    ErrorText(60) = "Use curl to upload"
 ElseIf Locale = "es-es" Then
       LocalLevelsButton.Caption = "Niveles local"
       OnlineLevelsButton.Caption = "SMMWE Cloud"
@@ -588,6 +629,16 @@ ElseIf Locale = "es-es" Then
     ErrorText(48) = "  Muertes:"
     ErrorText(49) = "  Tasa clara:"
     ErrorText(50) = "Debido a que la paginacion esta cancelada, tarda mucho en cargarse, tenga paciencia ..."
+    ErrorText(51) = "Comentarios"
+    ErrorText(52) = "Ajustes"
+    ErrorText(53) = "Activar la cache"
+    ErrorText(54) = "Guardar"
+    ErrorText(55) = "Idioma"
+     ErrorText(56) = "S.Chino"
+     ErrorText(57) = "Ingles"
+     ErrorText(58) = "Espanol"
+    ErrorText(59) = "Usa curl para descargar"
+    ErrorText(60) = "Usa curl para subir"
     End If
     Close #3
     End If
@@ -597,10 +648,13 @@ ElseIf Locale = "es-es" Then
     ExtractButton.Caption = ErrorText(22)
     ImportButton.Caption = ErrorText(31)
     CopyLinkButton.Caption = ErrorText(24)
+    CommentButton.Caption = ErrorText(51)
+    SettingsButton.Caption = ErrorText(52)
 '删除在线关卡列表缓存
+If IsEnableCache = 0 Then
     If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
     If CheckFileExists(ConfigFolder & "\SMMWEParseTemp.json") = True Then Kill ConfigFolder & "\SMMWEParseTemp.json"
-    If CheckFileExists(ConfigFolder & "\SMMWEAuthorImg.png") = True Then Kill ConfigFolder & "\SMMWEAuthorImg.png"
+    End If
 '处理界面
     Form1.Caption = Title & " - " & LocalLevelsButton.Caption
 DeleteButton.Visible = True
@@ -613,6 +667,7 @@ List1.Top = 120
 List1.Height = 5340
 SearchButton.Visible = False
 CopyLinkButton.Visible = False
+CommentButton.Visible = False
 ImportButton.Visible = True
 LevelCounter.Visible = True
 List1.Visible = True
@@ -657,6 +712,7 @@ ImportButton.Visible = True
 InfoButton.Visible = True
 DownloadButton.Visible = False
 UploadButton.Visible = True
+CommentButton.Visible = False
 CopyLinkButton.Visible = False
 ExtractButton.Visible = True
 SearchButton.Visible = False
@@ -692,9 +748,20 @@ End Sub
 
 Private Sub OnlineLevelsButton_Click()
 '在线关卡按钮
+If IsEnableCache = 0 Then
     If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
+    Else
+    If CheckFileExists(ConfigFolder & "\SMMWECloudCacheConfig.cfg") = True Then
+        Open ConfigFolder & "\SMMWECloudCacheConfig.cfg" For Input As #20
+        Line Input #20, TempVal
+        TempVal = Replace(TempVal, "Create cache at ", "")
+        Close #20
+        If CInt(TempVal) <> Day(Now) Then
+            If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = True Then Kill ConfigFolder & "\SMMWECloudLevelList.txt"
+        End If
+    End If
+    End If
 LevelSourceUrl = "https://apiv2.smmwe.ml/smmweroot/"
-
     Form1.Caption = Title & " - " & OnlineLevelsButton.Caption
 List1.Clear
 List1.AddItem ErrorText(26)
@@ -704,6 +771,7 @@ RenameButton.Visible = False
 ExtractButton.Visible = False
 CopyLinkButton.Visible = True
 DownloadButton.Visible = True
+CommentButton.Visible = True
 InfoButton.Visible = False
 ImportButton.Visible = False
 UploadButton.Visible = False
@@ -726,7 +794,16 @@ Search.ForeColor = RGB(130, 130, 130)
 List1.Height = 4860
 LevelCounter.Visible = False
 DoEvents
+If IsEnableCache = 0 Then
     Debug.Print DownloadFile("https://apiv2.smmwe.ml/smmweroot/", ConfigFolder & "\SMMWECloudLevelList.txt")
+    Else
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelList.txt") = False Then
+    Debug.Print DownloadFile("https://apiv2.smmwe.ml/smmweroot/", ConfigFolder & "\SMMWECloudLevelList.txt")
+Open ConfigFolder & "\SMMWECloudCacheConfig.cfg" For Output As #15
+Print #15, "Create cache at " & CStr(Day(Now))
+Close #15
+    End If
+    End If
     '拉取关卡
     Dim filelist As String
     Open ConfigFolder & "\SMMWECloudLevelList.txt" For Input As #1
@@ -784,9 +861,11 @@ Private Sub DownloadButton_Click()
 If List1.Text <> "" Then
     DownloadButton.Caption = ErrorText(5)
     Dim DownloadFileName As String
+    Dim DownloadURL As String
     DownloadFileName = List1.Text & ".swe"
     If CheckFileExists(LevelFolder & "\" & List1.Text & ".swe") = True Then DownloadFileName = List1.Text & " (1).swe"
-    Debug.Print DownloadFile(LevelSourceUrl & Replace(List1.Text, " ", "%20") & ".swe", LevelFolder & "\" & DownloadFileName)
+    DownloadURL = LevelSourceUrl & Replace(List1.Text, " ", "%20") & ".swe"
+    Debug.Print DownloadFile(DownloadURL, LevelFolder & "\" & DownloadFileName)
     DownloadButton.Caption = ErrorText(6)
     DoEvents
     Sleep (500)
@@ -799,6 +878,9 @@ If List1.Text <> "" Then
 Clipboard.SetText ("https://apiv2.smmwe.ml/smmweroot/" & Replace(List1.Text, " ", "%20") & ".swe")
 End If
 End Sub
+
+
+
 
 '重命名
 Private Sub RenameButton_Click()
@@ -881,6 +963,10 @@ End If
 LevelCounter.Caption = CStr(List1.ListCount) & ErrorText(25)
 End Sub
 
+Private Sub SettingsButton_Click()
+frmSettings.Show
+End Sub
+
 Private Sub UploadButton_Click()
 On Error Resume Next
 '上传
@@ -903,13 +989,16 @@ If List1.Text <> "" Then
         Open LevelFolder & "\" & List1.Text & ".swe" For Input As #8
         Line Input #8, LevelContentTmp
         Close #8
+        Dim UploadURL, UploadFileName As String
     If CanUpload = True Then
-        Debug.Print PostData("https://apiv2.smmwe.ml/smmweroot/?upload=" & Replace(List1.Text, " ", "%20") & ".swe&key=yidaozhan-gq-franyer-farias-apiv2", LevelContentTmp)
+        UploadURL = "https://apiv2.smmwe.ml/smmweroot/?upload=" & Replace(List1.Text, " ", "%20") & ".swe&key=yidaozhan-gq-franyer-farias-apiv2"
+        Debug.Print PostData(UploadURL, LevelContentTmp)
     Else
         Dim LevelMaker As String
         LevelMaker = Replace(Join(Filter(Split(LevelContentTmp, ","), Chr(34) & "user" & Chr(34)), ""), Chr(34) & "user" & Chr(34) & ": ", "")
         LevelMaker = Replace(LevelMaker, Chr(34), "")
-        Debug.Print PostData("https://apiv2.smmwe.ml/smmweroot/?upload=" & Replace(List1.Text, " ", "%20") & " By" & LevelMaker & ".swe&key=yidaozhan-gq-franyer-farias-apiv2", LevelContentTmp)
+        UploadURL = "https://apiv2.smmwe.ml/smmweroot/?upload=" & Replace(List1.Text, " ", "%20") & " By" & LevelMaker & ".swe&key=yidaozhan-gq-franyer-farias-apiv2"
+            Debug.Print PostData(UploadURL, LevelContentTmp)
     End If
     UploadButton.Caption = ErrorText(39)
     MsgBox ErrorText(38)
@@ -1023,7 +1112,12 @@ FileCopy LevelFolder & "\" & List1.Text & ".swe", DesktopFolder & "\" & List1.Te
     ExtractButton.Caption = ErrorText(22)
 End If
 End Sub
-
+Private Sub CommentButton_Click()
+'评论区
+If List1.Text <> "" Then
+Shell "cmd /c start https://cloud.smmwe.ml/main/" & List1.Text & ".swe?preview", vbMinimizedNoFocus
+End If
+End Sub
 
 Private Sub OfficialButton_Click()
 '官方API
@@ -1036,6 +1130,7 @@ UploadButton.Visible = False
 ExtractButton.Visible = False
 SearchButton.Visible = False
 ImportButton.Visible = False
+CommentButton.Visible = False
 CopyLinkButton.Visible = False
 List1.Visible = False
 Search.Visible = False

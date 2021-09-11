@@ -1,9 +1,10 @@
 VERSION 5.00
 Begin VB.Form frmAbout 
+   BorderStyle     =   1  'Fixed Single
    Caption         =   "Form3"
    ClientHeight    =   3135
-   ClientLeft      =   60
-   ClientTop       =   405
+   ClientLeft      =   45
+   ClientTop       =   390
    ClientWidth     =   5280
    BeginProperty Font 
       Name            =   "Î¢ÈíÑÅºÚ"
@@ -16,6 +17,8 @@ Begin VB.Form frmAbout
    EndProperty
    Icon            =   "frmAbout.frx":0000
    LinkTopic       =   "Form3"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
    ScaleHeight     =   3135
    ScaleWidth      =   5280
    StartUpPosition =   3  '´°¿ÚÈ±Ê¡

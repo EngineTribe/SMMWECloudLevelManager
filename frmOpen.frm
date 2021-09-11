@@ -2,47 +2,45 @@ VERSION 5.00
 Begin VB.Form frmOpen 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Open"
-   ClientHeight    =   4155
+   ClientHeight    =   4215
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   6960
    BeginProperty Font 
+      Name            =   "Î¢ÈíÑÅºÚ"
+      Size            =   9
+      Charset         =   134
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
    EndProperty
-   Font            =   "frmOpen.frx":0000
-   Icon            =   "frmOpen.frx":0013
+   Icon            =   "frmOpen.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4155
+   ScaleHeight     =   4215
    ScaleWidth      =   6960
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'ÆÁÄ»ÖÐÐÄ
    Begin VB.CommandButton CancelButton 
       Caption         =   "Cancel"
-      BeginProperty Font 
-      EndProperty
-      Font            =   "frmOpen.frx":2B0D
       Height          =   375
       Left            =   5040
       TabIndex        =   2
-      Top             =   3600
+      Top             =   3720
       Width           =   1815
    End
    Begin VB.CommandButton OpenButton 
       Caption         =   "Open"
-      BeginProperty Font 
-      EndProperty
-      Font            =   "frmOpen.frx":2B20
       Height          =   375
       Left            =   3120
       TabIndex        =   1
-      Top             =   3600
+      Top             =   3720
       Width           =   1815
    End
    Begin VB.DriveListBox Drive1 
-      BeginProperty Font 
-      EndProperty
-      Font            =   "frmOpen.frx":2B33
+      Appearance      =   0  'Flat
       Height          =   375
       Left            =   120
       TabIndex        =   3
@@ -50,20 +48,16 @@ Begin VB.Form frmOpen
       Width           =   2895
    End
    Begin VB.DirListBox Dir1 
-      BeginProperty Font 
-      EndProperty
-      Font            =   "frmOpen.frx":2B46
+      Appearance      =   0  'Flat
       Height          =   3510
       Left            =   120
       TabIndex        =   4
-      Top             =   480
+      Top             =   600
       Width           =   2895
    End
    Begin VB.FileListBox File1 
-      BeginProperty Font 
-      EndProperty
-      Font            =   "frmOpen.frx":2B59
-      Height          =   3405
+      Appearance      =   0  'Flat
+      Height          =   3345
       Left            =   3120
       Pattern         =   "*.swe"
       TabIndex        =   0
@@ -113,7 +107,7 @@ Private Sub OpenLevel()
             Form1.LevelCounter.Caption = CStr(Form1.List1.ListCount) & ErrorText(25)
         Unload Me
     Else
-        msgbox ErrorText(35), vbOKOnly, "Sorry.", 0, 0
+        MsgBox ErrorText(35), vbOKOnly, "Sorry.", 0, 0
     End If
 End Sub
 

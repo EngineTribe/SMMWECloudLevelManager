@@ -1,23 +1,26 @@
 VERSION 5.00
 Begin VB.Form Form2 
-   Caption         =   "SMMWE Cloud Tool Config"
+   Caption         =   "SMMWE Cloud Level Manager"
    ClientHeight    =   2325
    ClientLeft      =   60
    ClientTop       =   405
    ClientWidth     =   5595
    BeginProperty Font 
+      Name            =   "Œ¢»Ì—≈∫⁄"
+      Size            =   9
+      Charset         =   134
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
    EndProperty
-   Font            =   "Form2.frx":0000
-   Icon            =   "Form2.frx":0013
+   Icon            =   "Form2.frx":0000
    LinkTopic       =   "Form2"
    ScaleHeight     =   2325
    ScaleWidth      =   5595
    StartUpPosition =   3  '¥∞ø⁄»± °
    Begin VB.CommandButton Command3 
       Caption         =   "Espanol"
-      BeginProperty Font 
-      EndProperty
-      Font            =   "Form2.frx":2B0D
       Height          =   615
       Left            =   3840
       TabIndex        =   2
@@ -26,9 +29,6 @@ Begin VB.Form Form2
    End
    Begin VB.CommandButton Command2 
       Caption         =   "English"
-      BeginProperty Font 
-      EndProperty
-      Font            =   "Form2.frx":2B20
       Height          =   615
       Left            =   2040
       TabIndex        =   1
@@ -37,9 +37,6 @@ Begin VB.Form Form2
    End
    Begin VB.CommandButton Command1 
       Caption         =   "ºÚÃÂ÷–Œƒ"
-      BeginProperty Font 
-      EndProperty
-      Font            =   "Form2.frx":2B33
       Height          =   615
       Left            =   240
       TabIndex        =   0
@@ -47,9 +44,6 @@ Begin VB.Form Form2
       Width           =   1455
    End
    Begin VB.Label Label1 
-      BeginProperty Font 
-      EndProperty
-      Font            =   "Form2.frx":2B46
       Height          =   975
       Left            =   240
       TabIndex        =   3
@@ -64,8 +58,9 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Command1_Click()
 On Error GoTo Err2
-Open ConfigFolder & "\SMMWECloudLocale.cfg" For Output As #2
+Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Output As #2
 Print #2, "zh-cn"
+Print #2, "1"
 Close #2
 Unload Me
     Load Form1
@@ -74,8 +69,9 @@ Unload Me
 Err2:
 MkDir ConfigFolder
 MkDir ConfigFolder & "\Niveles"
-Open ConfigFolder & "\SMMWECloudLocale.cfg" For Output As #2
+Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Output As #2
 Print #2, "zh-cn"
+Print #2, "1"
 Close #2
 Unload Me
     Load Form1
@@ -83,8 +79,9 @@ Unload Me
 End Sub
 Private Sub Command2_Click()
 On Error GoTo Err3
-Open ConfigFolder & "\SMMWECloudLocale.cfg" For Output As #2
+Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Output As #2
 Print #2, "en-us"
+Print #2, "1"
 Close #2
 Unload Me
     Load Form1
@@ -93,8 +90,9 @@ Unload Me
 Err3:
 MkDir ConfigFolder
 MkDir ConfigFolder & "\Niveles"
-Open ConfigFolder & "\SMMWECloudLocale.cfg" For Output As #2
+Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Output As #2
 Print #2, "en-us"
+Print #2, "1"
 Close #2
 Unload Me
     Load Form1
@@ -102,8 +100,9 @@ Unload Me
 End Sub
 Private Sub Command3_Click()
 On Error GoTo Err4
-Open ConfigFolder & "\SMMWECloudLocale.cfg" For Output As #2
+Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Output As #2
 Print #2, "es-es"
+Print #2, "1"
 Close #2
 Unload Me
     Load Form1
@@ -112,8 +111,9 @@ Unload Me
 Err4:
 MkDir ConfigFolder
 MkDir ConfigFolder & "\Niveles"
-Open ConfigFolder & "\SMMWECloudLocale.cfg" For Output As #2
-Print #2, "en-us"
+Open ConfigFolder & "\SMMWECloudLevelManager.cfg" For Output As #2
+Print #2, "es-es"
+Print #2, "1"
 Close #2
 Unload Me
     Load Form1
@@ -131,7 +131,7 @@ LevelFolder = strHomeFolder & "\AppData\Local\SMM_WE\Niveles"
 DesktopFolder = strHomeFolder & "\AppData\Local\SMM_WE\Desktop"
 If CheckFileExists("C:\Windows\System32\winecfg.exe") = True Then GoTo Err
 Label1.Caption = "«Î—°‘Òƒ„µƒ”Ô—‘°£" & vbCrLf & "Please select your language." & vbCrLf & "Seleccione su idioma."
-    If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelManager.cfg") = True Then
     Load Form1
     Unload Me
     Form1.Show
@@ -143,7 +143,7 @@ LevelFolder = "C:\Users\" & Environ("UserName") & "\AppData\Local\SMM_WE\Niveles
 ConfigFolder = "C:\Users\" & Environ("UserName") & "\AppData\Local\SMM_WE"
 DesktopFolder = "C:\Users\" & Environ("UserName") & "\Desktop"
 Label1.Caption = "«Î—°‘Òƒ„µƒ”Ô—‘°£" & vbCrLf & "Please select your language." & vbCrLf & "Seleccione su idioma."
-    If CheckFileExists(ConfigFolder & "\SMMWECloudLocale.cfg") = True Then
+    If CheckFileExists(ConfigFolder & "\SMMWECloudLevelManager.cfg") = True Then
     Load Form1
     Unload Me
     Form1.Show
