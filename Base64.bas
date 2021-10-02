@@ -1,5 +1,5 @@
 Attribute VB_Name = "Base64"
-
+'Base64 Decode
 Option Explicit
 Private Const cstBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 Private arrBase64() As String
