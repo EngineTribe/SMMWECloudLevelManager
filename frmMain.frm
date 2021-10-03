@@ -403,43 +403,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
-InternalVersion = "5.1"
-AppVersion = "5.1"
-'Load Config
-Open ConfigFolder & "\MainConfig.txt" For Input As #3
-Line Input #3, Locale
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
-IsSFXEnable = True
-Else
-IsSFXEnable = False
-End If
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
-IsBGMEnable = True
-Else
-IsBGMEnable = False
-End If
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
-IsPreloadEnable = True
-Else
-IsPreloadEnable = False
-End If
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
-ProxyDlSuffix = "?proxied"
-Else
-ProxyDlSuffix = ""
-End If
-Line Input #3, UseMirror
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
-DownloadMethod = 1
-Else
-DownloadMethod = 0
-End If
-Close #3
+InternalVersion = "5.2"
+AppVersion = "5.2"
+LoadConfig
 'Load Mirrorlist
 Open App.path & "\Assets\mirrorlist.txt" For Input As #8
     MirrorTmp = ""
@@ -1042,4 +1008,57 @@ AboutButton.Visible = False
 SettingsButton.Visible = False
 MundialesButton.Visible = False
 MundialesLabel.Visible = False
+End Sub
+Private Sub LoadConfig()
+On Error GoTo ConfigErr
+'Load Config
+Open ConfigFolder & "\MainConfig.txt" For Input As #3
+Line Input #3, Locale
+Line Input #3, ConfigTmp
+If ConfigTmp = 1 Then
+IsSFXEnable = True
+Else
+IsSFXEnable = False
+End If
+Line Input #3, ConfigTmp
+If ConfigTmp = 1 Then
+IsBGMEnable = True
+Else
+IsBGMEnable = False
+End If
+Line Input #3, ConfigTmp
+If ConfigTmp = 1 Then
+IsPreloadEnable = True
+Else
+IsPreloadEnable = False
+End If
+Line Input #3, ConfigTmp
+If ConfigTmp = 1 Then
+ProxyDlSuffix = "?proxied"
+Else
+ProxyDlSuffix = ""
+End If
+Line Input #3, UseMirror
+Line Input #3, ConfigTmp
+If ConfigTmp = 1 Then
+DownloadMethod = 1
+Else
+DownloadMethod = 0
+End If
+Close #3
+Exit Sub
+ConfigErr:
+Close #3
+Kill ConfigFolder & "\MainConfig.txt"
+MsgBox "版本更新完成，请重新启动本程序。" & vbCrLf & "Updating completed, please restart the program." & vbCrLf & "Actualizacion completa, reinicie el programa."
+'Exit
+'Stop SDLMixerX and the process
+If IsSFXEnable Or IsBGMEnable Then
+    Mix_CloseAudio
+    Mix_Quit
+    SDL_Quit
+    End If
+    Call RemoveFontResourceEx(ConfigFolder & "\Assets\DinkieBitmap-9pxDemoMod.ttf", FR_PRIVATE, 0)
+    Call RemoveFontResourceEx(App.path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
+    Shell "taskkill /f /im SMMWECloudLevelMgr.exe", vbMinimizedNoFocus
 End Sub
