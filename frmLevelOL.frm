@@ -11,6 +11,12 @@ Begin VB.Form frmLevelOL
    ScaleWidth      =   14190
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  '´°¿ÚÈ±Ê¡
+   Begin VB.Image CopyLinkButton 
+      Height          =   855
+      Left            =   12360
+      Top             =   5880
+      Width           =   975
+   End
    Begin VB.Label CommentLabel 
       Alignment       =   2  'Center
       Appearance      =   0  'Flat
@@ -28,7 +34,7 @@ Begin VB.Form frmLevelOL
       EndProperty
       ForeColor       =   &H80000008&
       Height          =   615
-      Left            =   8280
+      Left            =   7320
       TabIndex        =   4
       Top             =   6120
       Width           =   3495
@@ -50,20 +56,20 @@ Begin VB.Form frmLevelOL
       EndProperty
       ForeColor       =   &H80000008&
       Height          =   615
-      Left            =   1800
+      Left            =   1320
       TabIndex        =   3
       Top             =   6120
       Width           =   3495
    End
    Begin VB.Image CommentButton 
       Height          =   855
-      Left            =   7320
+      Left            =   6480
       Top             =   5880
       Width           =   5295
    End
    Begin VB.Image DownloadButton 
       Height          =   855
-      Left            =   1080
+      Left            =   480
       Top             =   5880
       Width           =   5055
    End
@@ -169,15 +175,29 @@ Private Sub CommentLabel_Click()
 CommentButton_Click
 End Sub
 
+Private Sub CopyLinkButton_Click()
+PlaySFX "snd_aceptar.ogg"
+Clipboard.SetText Me.LevelNameLabel.Caption & vbCrLf & "https://smmwe-cloud.vercel.app/main/" & Replace(frmLevelOL.LevelNameLabel.Caption, " ", "%20") & ".swe"
+ShowMsgBox ("LINK")
+End Sub
+
 Private Sub DownloadButton_Click()
 PlaySFX "snd_aceptar.ogg"
 If IsPreloadEnable Then
     ShowMsgBox "LOADING"
     DoEvents
     If CheckFileExists(LevelFolder & "\" & frmLevelOL.LevelNameLabel.Caption & ".swe") = False Then
+        If DownloadMethod = 1 Then
         Call URLDownloadToFile(0, OLAPIIP & "smmweroot/" & Replace(frmLevelOL.LevelNameLabel.Caption, " ", "%20") & ".swe" & ProxyDlSuffix, LevelFolder & "\" & frmLevelOL.LevelNameLabel.Caption & ".swe", 0, 0)
+        Else
+        Call URLDownloadToFile(0, OLWebIP & "main/" & Replace(frmLevelOL.LevelNameLabel.Caption, " ", "%20") & ".swe", LevelFolder & "\" & frmLevelOL.LevelNameLabel.Caption & ".swe", 0, 0)
+        End If
     Else
+        If DownloadMethod = 1 Then
         Call URLDownloadToFile(0, OLAPIIP & "smmweroot/" & Replace(frmLevelOL.LevelNameLabel.Caption, " ", "%20") & ".swe" & ProxyDlSuffix, LevelFolder & "\" & frmLevelOL.LevelNameLabel.Caption & " (2).swe", 0, 0)
+        Else
+        Call URLDownloadToFile(0, OLWebIP & "main/" & Replace(frmLevelOL.LevelNameLabel.Caption, " ", "%20") & ".swe", LevelFolder & "\" & frmLevelOL.LevelNameLabel.Caption & " (2).swe", 0, 0)
+        End If
     End If
 Else
     If CheckFileExists(LevelFolder & "\" & frmLevelOL.LevelNameLabel.Caption & ".swe") = False Then
@@ -205,6 +225,7 @@ LevelNameLabel.ForeColor = RGB(89, 15, 16)
 LevelNameLabel.Caption = right(frmMain.ListOL.Text, Len(frmMain.ListOL.Text) - 1)
 LevelNameLabel.Font.Name = "AsepriteFont"
 DecLabel.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-oltag.png")
+CopyLinkButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-copylink.png")
 'Load Default cfg
 lvlTag.ForeColor = RGB(89, 15, 16)
 lvlTag.Font.Name = "DinkieBitmap 9pxDemo"
@@ -229,7 +250,11 @@ DoEvents
 If IsPreloadEnable Then
 lvlInfos.Caption = ConstStr(26)
 If CheckFileExists(ConfigFolder & "\.ParseTemp.tmp") Then Kill ConfigFolder & "\.ParseTemp.tmp"
+If DownloadMethod = 1 Then
 Call URLDownloadToFile(0, OLAPIIP & "smmweroot/" & frmLevelOL.LevelNameLabel.Caption & ".swe", ConfigFolder & "\.ParseTemp.tmp", 0, 0)
+Else
+Call URLDownloadToFile(0, OLWebIP & "main/" & frmLevelOL.LevelNameLabel.Caption & ".swe", ConfigFolder & "\.ParseTemp.tmp", 0, 0)
+End If
 Dim levelcontent As String
 Open ConfigFolder & "\.ParseTemp.tmp" For Input As #8
 Line Input #8, levelcontent

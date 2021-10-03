@@ -1,0 +1,40 @@
+' SMMWE Cloud Mirrorlist Version 5.1
+'
+' ---------------------------------
+'
+[Default]
+Name=默认,Default,Defecto
+Base=https://cloud.smmwe.ml/
+API=https://apiv2.smmwe.ml/
+'
+[NoCNAME]
+Name=默认 (无 CNAME), Default (No CNAME),Defecto (Sin CNAME)
+Base=https://smmwe-cloud.vercel.app/
+API=https://smmwe-cloud-apiv2.sydzy2.workers.dev/
+'
+[CFCDN]
+Name=CloudFlare (CDN),CloudFlare (CDN),CloudFlare (CDN)
+Base=https://smmwe-cloud-cdn.sydzy2.workers.dev/
+API=https://smmwe-cloud-apiv2.sydzy2.workers.dev/
+'
+[CFNoCDN]
+Name=CloudFlare (无 CDN),CloudFlare (No CDN),CloudFlare (Sin CDN)
+Base=https://smmwe-cloud-nocdn.sydzy2.workers.dev/
+API=https://smmwe-cloud-apiv2.sydzy2.workers.dev/
+'
+[CFProxy]
+Name=CloudFlare (反代),CloudFlare (Proxy),CloudFlare (Proxy)
+Base=https://gh-rp.sydzy2.workers.dev/https://smmwe-cloud-webv2-yidaozhanya.vercel.app/
+API=https://gh-rp.sydzy2.workers.dev/https://smmwe-cloud-apiv2.sydzy2.workers.dev/
+'
+[Vercel]
+Name=Vercel,Vercel,Vercel
+Base=https://smmwe-cloud-webv2-yidaozhanya.vercel.app/
+API=https://smmwe-cloud-apiv2.sydzy2.workers.dev/
+'
+' Create your own SMMWE Cloud Mirror by creating a
+' reverse proxy to https://smmwe-cloud.vercel.app/ (Base)
+' and https://smmwe-cloud-apiv2.sydzy2.workers.dev/ (API),
+' then email your Mirror domain(URL) to me.
+'
+' 2021 YidaozhanYa smmwe_cloud@outlook.com

@@ -91,11 +91,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
 On Error Resume Next
-'Load DomainList
-Open App.path & "\Assets\CloudDomain.txt" For Input As #8
-Line Input #8, OLWebIP
-Line Input #8, OLAPIIP
-Close #8
 'Load Variable
 On Error Resume Next
 Dim oShell
@@ -141,7 +136,6 @@ esES.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
    frmMain.Show
     End If
 End Sub
-
 'Select Locale
 Private Sub zhCN_Click()
 Locale = "zh-cn"
@@ -188,4 +182,10 @@ Print #2, "1"
 Print #2, "0"
 Print #2, "1"
 Print #2, "1"
+If Locale = "zh-cn" Then
+Print #2, "NoCNAME"
+Else
+Print #2, "Default"
+End If
+Print #2, 1
 End Sub

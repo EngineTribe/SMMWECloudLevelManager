@@ -99,6 +99,12 @@ Label1.Caption = ConstStr(23)
 Label1.Font.Name = "DinkieBitmap 9pxDemo"
 Timer1.Enabled = False
 End If
+If MsgBoxType = "UPDATING" Then
+Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-msgdownloading.png")
+Label1.Caption = ConstStr(49)
+Label1.Font.Name = "DinkieBitmap 9pxDemo"
+Timer1.Enabled = False
+End If
 If MsgBoxType = "UPLOADING" Then
 Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-msgdownloading.png")
 Label1.Caption = ConstStr(43)
@@ -125,6 +131,13 @@ Label1.Font.Name = "DinkieBitmap 9pxDemo"
 Timer1.Interval = 1500
 Timer1.Enabled = True
 End If
+If MsgBoxType = "LINK" Then
+Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-msgok.png")
+Label1.Caption = ConstStr(47)
+Label1.Font.Name = "DinkieBitmap 9pxDemo"
+Timer1.Interval = 1500
+Timer1.Enabled = True
+End If
 If MsgBoxType = "RENAME" Then
 Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-msgok.png")
 Label1.Caption = ConstStr(25)
@@ -135,6 +148,13 @@ End If
 If MsgBoxType = "SEARCHERR" Then
 Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-msgerr.png")
 Label1.Caption = ConstStr(36)
+Label1.Font.Name = "DinkieBitmap 9pxDemo"
+Timer1.Interval = 1500
+Timer1.Enabled = True
+End If
+If MsgBoxType = "LATEST" Then
+Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-msgok.png")
+Label1.Caption = ConstStr(54)
 Label1.Font.Name = "DinkieBitmap 9pxDemo"
 Timer1.Interval = 1500
 Timer1.Enabled = True

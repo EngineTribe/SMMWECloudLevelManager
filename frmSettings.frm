@@ -21,6 +21,18 @@ Begin VB.Form frmSettings
    MinButton       =   0   'False
    ScaleHeight     =   4890
    ScaleWidth      =   8940
+   Begin VB.ComboBox Combo2 
+      Appearance      =   0  'Flat
+      Height          =   495
+      IMEMode         =   3  'DISABLE
+      ItemData        =   "frmSettings.frx":2AFA
+      Left            =   4080
+      List            =   "frmSettings.frx":2AFC
+      TabIndex        =   14
+      Text            =   "Combo1"
+      Top             =   3000
+      Width           =   3255
+   End
    Begin VB.CheckBox EnableCDN 
       Caption         =   "CDN"
       Height          =   375
@@ -44,6 +56,36 @@ Begin VB.Form frmSettings
       TabIndex        =   9
       Top             =   0
       Width           =   4935
+      Begin VB.ComboBox Combo1 
+         Appearance      =   0  'Flat
+         Height          =   495
+         IMEMode         =   3  'DISABLE
+         ItemData        =   "frmSettings.frx":2AFE
+         Left            =   240
+         List            =   "frmSettings.frx":2B00
+         TabIndex        =   11
+         Text            =   "Combo1"
+         Top             =   1920
+         Width           =   3255
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Label2"
+         Height          =   495
+         Left            =   240
+         TabIndex        =   13
+         Top             =   2520
+         Width           =   4455
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Label1"
+         Height          =   495
+         Left            =   240
+         TabIndex        =   12
+         Top             =   1440
+         Width           =   2415
+      End
    End
    Begin VB.CheckBox EnableMusic 
       Caption         =   "Music"
@@ -92,6 +134,26 @@ Begin VB.Form frmSettings
          Top             =   480
          Width           =   3015
       End
+   End
+   Begin VB.Label UpdateLabel 
+      Alignment       =   2  'Center
+      Appearance      =   0  'Flat
+      BackColor       =   &H80000005&
+      BackStyle       =   0  'Transparent
+      Caption         =   "Label1"
+      ForeColor       =   &H80000008&
+      Height          =   375
+      Left            =   120
+      TabIndex        =   15
+      Top             =   4200
+      Width           =   1695
+   End
+   Begin VB.Image UpdateButton 
+      Appearance      =   0  'Flat
+      Height          =   495
+      Left            =   120
+      Top             =   4200
+      Width           =   1815
    End
    Begin VB.Label NoLabel 
       Alignment       =   2  'Center
@@ -166,6 +228,7 @@ YesLabel.Caption = ConstStr(30)
 NoLabel.Caption = ConstStr(8)
 YesButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
 NoButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
+UpdateButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
 EnableSFX.Font.Name = "DinkieBitmap 9pxDemo"
 EnableMusic.Font.Name = "DinkieBitmap 9pxDemo"
 EnablePreload.Font.Name = "DinkieBitmap 9pxDemo"
@@ -184,6 +247,21 @@ EnablePreload.ForeColor = RGB(89, 15, 16)
 EnableCDN.ForeColor = RGB(89, 15, 16)
 YesLabel.ForeColor = RGB(89, 15, 16)
 NoLabel.ForeColor = RGB(89, 15, 16)
+Label1.Caption = ConstStr(45)
+Label1.ForeColor = RGB(89, 15, 16)
+Label1.Font.Name = "DinkieBitmap 9pxDemo"
+Combo1.ForeColor = RGB(89, 15, 16)
+Combo1.Font.Name = "DinkieBitmap 9pxDemo"
+Combo1.AddItem "API"
+Combo1.AddItem "WEB"
+Label2.Caption = ConstStr(46)
+Label2.ForeColor = RGB(89, 15, 16)
+Label2.Font.Name = "DinkieBitmap 9pxDemo"
+Combo2.ForeColor = RGB(89, 15, 16)
+Combo2.Font.Name = "DinkieBitmap 9pxDemo"
+UpdateLabel.ForeColor = RGB(89, 15, 16)
+UpdateLabel.Font.Name = "DinkieBitmap 9pxDemo"
+UpdateLabel.Caption = ConstStr(48)
 'load Locale
 If Locale = "zh-cn" Then
 zhCN.Value = True
@@ -203,8 +281,76 @@ If IsSFXEnable Then EnableSFX.Value = 1
 If IsBGMEnable Then EnableMusic.Value = 1
 If IsPreloadEnable Then EnablePreload.Value = 1
 If ProxyDlSuffix = "?proxied" Then EnableCDN.Value = 1
+If DownloadMethod = 1 Then
+Combo1.Text = "API"
+Else
+Combo1.Text = "WEB"
+End If
+Debug.Print Locale
+    MirrorlistTmp = Split(Replace(Join(MirrorList, vbCrLf), "]", ""), "[")
+    I = 1
+    For I = 1 To UBound(MirrorlistTmp)
+    If Locale = "zh-cn" Then
+    Combo2.AddItem Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(0)
+    ElseIf Locale = "en-us" Then
+    Combo2.AddItem Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(1)
+    ElseIf Locale = "es-es" Then
+    Combo2.AddItem Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(2)
+    End If
+    Next I
+    I = 1
+    For I = 1 To UBound(MirrorlistTmp)
+    If Split(MirrorlistTmp(I), vbCrLf)(0) = UseMirror Then
+    If Locale = "zh-cn" Then
+    Combo2.Text = Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(0)
+    ElseIf Locale = "en-us" Then
+    Combo2.Text = Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(1)
+    ElseIf Locale = "es-es" Then
+    Combo2.Text = Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(2)
+    End If
+    Exit For
+    End If
+    Next I
+End Sub
+Private Sub UpdateButton_Click()
+PlaySFX "snd_aceptar.ogg"
+Me.Hide
+ShowMsgBox "UPDATING"
+Dim GitHubUrl(1 To 2) As String, WebTmp As String
+If Locale = "zh-cn" Then
+GitHubUrl(1) = "https://hub.fastgit.org/YidaozhanYa/SMMWECloudLevelManager/"
+GitHubUrl(2) = "https://gh-rp.sydzy2.workers.dev/https://api.github.com/repos/YidaozhanYa/SMMWECloudLevelManager/releases/latest"
+Else
+GitHubUrl(1) = "https://github.com/YidaozhanYa/SMMWECloudLevelManager/"
+GitHubUrl(2) = "https://api.github.com/repos/YidaozhanYa/SMMWECloudLevelManager/releases/latest"
+End If
+WebTmp = GetDataSWE(GitHubUrl(2))
+frmMsgBox.Hide
+Unload frmMsgBox
+Sleep 20
+If CSng(Replace(Replace(Join(Filter(Split(WebTmp, ","), "tag_name"), ""), Chr(34), ""), "tag_name:v", "")) > CSng(InternalVersion) Then
+    If MsgBox(ConstStr(50) & vbCrLf & ConstStr(51) & CStr(AppVersion) & vbCrLf & ConstStr(52) & Replace(Replace(Join(Filter(Split(WebTmp, ","), Chr(34) & "name" & Chr(34) & ":" & Chr(34) & "v"), ""), Chr(34), ""), "name:v", "") & vbCrLf & ConstStr(53), vbOKCancel + vbExclamation, "") = vbCancel Then
+    PlaySFX "snd_close_guardabot.ogg"
+    frmMain.SetFocus
+    Exit Sub
+    Else
+    PlaySFX "snd_aceptar.ogg"
+    Shell "cmd /c start " & Chr(34) & " " & Chr(34) & " " & Chr(34) & GitHubUrl(1) & "releases/tag/v" & Replace(Replace(Join(Filter(Split(WebTmp, ","), "tag_name"), ""), Chr(34), ""), "tag_name:v", "") & Chr(34)
+    'Update
+    End If
+ElseIf CSng(Replace(Replace(Join(Filter(Split(WebTmp, ","), "tag_name"), ""), Chr(34), ""), "tag_name:v", "")) < CSng(InternalVersion) Then
+PlaySFX "snd_wrong.ogg"
+MsgBox "Error: Newer than GitHub", vbOKOnly, ""
+Else
+ShowMsgBox "LATEST"
+End If
+DeleteUrlCacheEntry GitHubUrl(2)
+Unload frmSettings
 End Sub
 
+Private Sub UpdateLabel_Click()
+UpdateButton_Click
+End Sub
 
 Private Sub zhCN_Click()
 PlaySFX "snd_aceptar.ogg"
@@ -241,10 +387,10 @@ Private Sub YesButton_Click()
 PlaySFX "snd_aceptar.ogg"
 Kill ConfigFolder & "\MainConfig.txt"
 Open ConfigFolder & "\MainConfig.txt" For Output As #2
-If zhCN.Value Then Locale = "zh-cn"
-If enUS.Value Then Locale = "en-us"
-If esES.Value Then Locale = "es-es"
-Print #2, Locale
+If zhCN.Value Then LocaleNew = "zh-cn"
+If enUS.Value Then LocaleNew = "en-us"
+If esES.Value Then LocaleNew = "es-es"
+Print #2, LocaleNew
 If EnableSFX.Value = 1 Then
 IsSFXEnable = True
 Print #2, "1"
@@ -273,7 +419,41 @@ Else
 ProxyDlSuffix = ""
 Print #2, "0"
 End If
+'Write Mirror
+    If Locale = "zh-cn" Then
+        For I = 1 To UBound(MirrorlistTmp)
+        If Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(0) = Combo2.Text Then
+        Print #2, Split(MirrorlistTmp(I), vbCrLf)(0)
+UseMirror = Split(MirrorlistTmp(I), vbCrLf)(0)
+        Exit For
+        End If
+        Next I
+    ElseIf Locale = "en-us" Then
+        For I = 1 To UBound(MirrorlistTmp)
+        If Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(1) = Combo2.Text Then
+        Print #2, Split(MirrorlistTmp(I), vbCrLf)(0)
+UseMirror = Split(MirrorlistTmp(I), vbCrLf)(0)
+        Exit For
+        End If
+        Next I
+    ElseIf Locale = "es-es" Then
+        For I = 1 To UBound(MirrorlistTmp)
+        If Split(Replace(Join(Filter(Split(MirrorlistTmp(I), vbCrLf), "Name="), ""), "Name=", ""), ",")(2) = Combo2.Text Then
+        Print #2, Split(MirrorlistTmp(I), vbCrLf)(0)
+UseMirror = Split(MirrorlistTmp(I), vbCrLf)(0)
+        Exit For
+        End If
+        Next I
+    End If
+If Combo1.Text = "API" Then
+DownloadMethod = 1
+Print #2, "1"
+Else
+DownloadMethod = 0
+Print #2, "0"
+End If
 Close #2
+Locale = LocaleNew
 Unload Me
 ShowMsgBox "SAVED"
 End Sub

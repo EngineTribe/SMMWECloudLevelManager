@@ -1,5 +1,0 @@
-https://smmwe-cloud.vercel.app/
-https://smmwe-cloud-apiv2.sydzy2.workers.dev/
-如果你那边没有遭受DNS污染，可以把上面两条换成
-https://cloud.smmwe.ml/
-https://apiv2.smmwe.ml/

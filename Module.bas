@@ -1,5 +1,5 @@
 Attribute VB_Name = "Module"
-Public AppVersion, InternalVersion As String
+Public AppVersion As String, InternalVersion As String
 Public Locale As String
 Public ConfigFolder As String
 Public DesktopFolder As String
@@ -13,11 +13,15 @@ Public IsBGMEnable As Boolean
 Public IsPreloadEnable As Boolean
 Public ProxyDlSuffix As String
 Public ConstStr() As String
+Public MirrorList() As String
 Public LocalizedVals() As String
 Public GameLabel() As String
 Public MsgBoxType As String
 Public IsLoading As Boolean
 Public IsSearching As Boolean
+Public DownloadMethod As Integer
+Public UseMirror As String
+Public MirrorlistTmp() As String
 Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal Cx As Long, ByVal Cy As Long, ByVal wFlags As Long) As Long
 Public Declare Function dcWaitForSingleObject Lib "kernel32" Alias "WaitForSingleObject" (ByVal hHandle As Long, ByVal dwMilliseconds As Long) As Long
 Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long

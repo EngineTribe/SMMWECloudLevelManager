@@ -403,8 +403,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
-InternalVersion = "5.0"
-AppVersion = "5.0 b3"
+InternalVersion = "5.1"
+AppVersion = "5.1"
 'Load Config
 Open ConfigFolder & "\MainConfig.txt" For Input As #3
 Line Input #3, Locale
@@ -432,14 +432,43 @@ ProxyDlSuffix = "?proxied"
 Else
 ProxyDlSuffix = ""
 End If
+Line Input #3, UseMirror
+Line Input #3, ConfigTmp
+If ConfigTmp = 1 Then
+DownloadMethod = 1
+Else
+DownloadMethod = 0
+End If
 Close #3
+'Load Mirrorlist
+Open App.path & "\Assets\mirrorlist.txt" For Input As #8
+    MirrorTmp = ""
+    MirrorTmp2 = ""
+    Do While Not EOF(8)
+    Line Input #8, MirrorTmp2
+    If left(MirrorTmp2, 1) <> "'" Then
+    MirrorTmp = MirrorTmp & MirrorTmp2 & vbCrLf
+    End If
+    Loop
+    MirrorList = Split(MirrorTmp, vbCrLf)
+    ReDim Preserve MirrorList(UBound(MirrorList) + 1)
+    I = 0
+    For I = 0 To UBound(MirrorList)
+    If MirrorList(I) = "[" & UseMirror & "]" Then
+    OLWebIP = Replace(MirrorList(I + 2), "Base=", "")
+    OLAPIIP = Replace(MirrorList(I + 3), "API=", "")
+    Exit For
+    End If
+    Next I
+Close #8
+
 'Load Locale
 Open App.path & "\Locale\" & Locale & ".lang" For Input As #1
     LocaleTmp = ""
-    localetmp2 = ""
+    LocaleTmp2 = ""
     Do While Not EOF(1)
-    Line Input #1, localetmp2
-    LocaleTmp = LocaleTmp & localetmp2 & vbCrLf
+    Line Input #1, LocaleTmp2
+    LocaleTmp = LocaleTmp & LocaleTmp2 & vbCrLf
     Loop
     ConstStr = Split(LocaleTmp, vbCrLf)
     ReDim Preserve ConstStr(UBound(ConstStr) + 1)
@@ -447,15 +476,15 @@ Close #1
 'Load Locale
 Open App.path & "\Locale\label-" & Locale & ".lang" For Input As #6
     LocaleTmp = ""
-    localetmp2 = ""
+    LocaleTmp2 = ""
     Do While Not EOF(6)
-    Line Input #6, localetmp2
-    LocaleTmp = LocaleTmp & localetmp2 & vbCrLf
+    Line Input #6, LocaleTmp2
+    LocaleTmp = LocaleTmp & LocaleTmp2 & vbCrLf
     Loop
     GameLabel = Split(LocaleTmp, vbCrLf)
     ReDim Preserve ConstStr(UBound(ConstStr) + 1)
     Set LocaleTmp = Nothing
-    Set localetmp2 = Nothing
+    Set LocaleTmp2 = Nothing
 Close #6
 'Load DinkieBitmap Font
 frmMain.Font.Name = "DinkieBitmap 9pxDemo"
@@ -547,8 +576,8 @@ ListLocal.AddItem " " & Replace(fname, ".swe", "")
 fname = Dir()
 Loop
 ReDim locallevel(0 To ListLocal.ListCount - 1) As String
-For i = 0 To ListLocal.ListCount - 1
-locallevel(i) = ListLocal.List(i)
+For I = 0 To ListLocal.ListCount - 1
+locallevel(I) = ListLocal.List(I)
 Next
 LevelCounterLocal.ForeColor = RGB(250, 228, 192)
 LevelCounterLocal.Font.Name = "AsepriteFont"
@@ -572,8 +601,8 @@ ListLocal.AddItem " " & Replace(fname, ".swe", "")
 fname = Dir()
 Loop
 ReDim locallevel(0 To ListLocal.ListCount - 1) As String
-For i = 0 To ListLocal.ListCount - 1
-locallevel(i) = ListLocal.List(i)
+For I = 0 To ListLocal.ListCount - 1
+locallevel(I) = ListLocal.List(I)
 Next
 LevelCounterLocal.Caption = CStr(ListLocal.ListCount) & "/60"
 End Sub
@@ -639,7 +668,7 @@ OLLevelList = PostDataSWE(OLWebIP & "main?filename", "pagenum=" & CStr(PageNum))
 OLLevelList2 = Split(OLLevelList, vbLf)
 ReDim Preserve OLLevelList2(UBound(OLLevelList2))
 ListOL.Clear
-For i = 0 To UBound(OLLevelList2) - 1
+For I = 0 To UBound(OLLevelList2) - 1
 ListOL.AddItem Replace((" " & OLLevelList2(l)), ".swe", "")
 l = l + 1
 Next
@@ -660,7 +689,7 @@ OLLevelList2 = Split(OLLevelList, vbLf)
 ReDim Preserve OLLevelList2(UBound(OLLevelList2))
 ListOL.Clear
 ListOL.Font.Name = "AsepriteFont"
-For i = 0 To UBound(OLLevelList2) - 1
+For I = 0 To UBound(OLLevelList2) - 1
 ListOL.AddItem Replace((" " & OLLevelList2(l)), ".swe", "")
 l = l + 1
 Next
@@ -943,7 +972,7 @@ OLLevelList2 = Filter(OLLevelList2, SearchText.Text)
 ReDim Preserve OLLevelList2(UBound(OLLevelList2))
 ListOL.Clear
 ListOL.Font.Name = "AsepriteFont"
-For i = 0 To UBound(OLLevelList2) - 1
+For I = 0 To UBound(OLLevelList2) - 1
 ListOL.AddItem Replace((" " & OLLevelList2(l)), ".swe", "")
 l = l + 1
 Next
@@ -1014,4 +1043,3 @@ SettingsButton.Visible = False
 MundialesButton.Visible = False
 MundialesLabel.Visible = False
 End Sub
-
