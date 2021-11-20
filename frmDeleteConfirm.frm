@@ -117,10 +117,12 @@ Label3.ForeColor = RGB(89, 15, 16)
 Label1.Caption = ConstStr(5) & frmLevel.LevelName.Caption & ConstStr(6)
 Label2.Caption = ConstStr(7)
 Label3.Caption = ConstStr(8)
-YesButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
-NoButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
+YesButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
+NoButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
 End Sub
-
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub Label2_Click()
 YesButton_Click
 End Sub

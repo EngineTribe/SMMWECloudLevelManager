@@ -20,6 +20,7 @@ Begin VB.Form frmAbout
       _ExtentX        =   17383
       _ExtentY        =   11245
       _Version        =   393217
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0
@@ -42,5 +43,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
 Me.Caption = ConstStr(28) & " " & ConstStr(0) & " " & AppVersion
-RichTextBox1.FileName = App.path & "\Assets\about-" & Locale & ".rtf"
+RichTextBox1.FileName = App.Path & "\Assets\about-" & Locale & ".rtf"
+End Sub
+Private Sub Form_Initialize()
+InitCommonControls
 End Sub

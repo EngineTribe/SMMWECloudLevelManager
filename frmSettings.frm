@@ -21,6 +21,14 @@ Begin VB.Form frmSettings
    MinButton       =   0   'False
    ScaleHeight     =   4890
    ScaleWidth      =   8940
+   Begin VB.CheckBox EnableSort 
+      Caption         =   "Sort"
+      Height          =   375
+      Left            =   4080
+      TabIndex        =   16
+      Top             =   1440
+      Width           =   3255
+   End
    Begin VB.ComboBox Combo2 
       Appearance      =   0  'Flat
       Height          =   495
@@ -30,7 +38,7 @@ Begin VB.Form frmSettings
       List            =   "frmSettings.frx":2AFC
       TabIndex        =   14
       Text            =   "Combo1"
-      Top             =   3000
+      Top             =   3480
       Width           =   3255
    End
    Begin VB.CheckBox EnableCDN 
@@ -51,7 +59,7 @@ Begin VB.Form frmSettings
    End
    Begin VB.Frame Frame2 
       Caption         =   "Frame2"
-      Height          =   3735
+      Height          =   4215
       Left            =   3840
       TabIndex        =   9
       Top             =   0
@@ -65,7 +73,7 @@ Begin VB.Form frmSettings
          List            =   "frmSettings.frx":2B00
          TabIndex        =   11
          Text            =   "Combo1"
-         Top             =   1920
+         Top             =   2400
          Width           =   3255
       End
       Begin VB.Label Label2 
@@ -74,7 +82,7 @@ Begin VB.Form frmSettings
          Height          =   495
          Left            =   240
          TabIndex        =   13
-         Top             =   2520
+         Top             =   3000
          Width           =   4455
       End
       Begin VB.Label Label1 
@@ -83,7 +91,7 @@ Begin VB.Form frmSettings
          Height          =   495
          Left            =   240
          TabIndex        =   12
-         Top             =   1440
+         Top             =   1920
          Width           =   2415
       End
    End
@@ -145,14 +153,14 @@ Begin VB.Form frmSettings
       Height          =   375
       Left            =   120
       TabIndex        =   15
-      Top             =   4200
+      Top             =   3500
       Width           =   1695
    End
    Begin VB.Image UpdateButton 
       Appearance      =   0  'Flat
       Height          =   495
       Left            =   120
-      Top             =   4200
+      Top             =   3480
       Width           =   1815
    End
    Begin VB.Label NoLabel 
@@ -163,9 +171,9 @@ Begin VB.Form frmSettings
       Caption         =   "Label1"
       ForeColor       =   &H80000008&
       Height          =   375
-      Left            =   6720
+      Left            =   2040
       TabIndex        =   5
-      Top             =   4200
+      Top             =   4250
       Width           =   1695
    End
    Begin VB.Label YesLabel 
@@ -176,22 +184,22 @@ Begin VB.Form frmSettings
       Caption         =   "Label1"
       ForeColor       =   &H80000008&
       Height          =   375
-      Left            =   4440
+      Left            =   120
       TabIndex        =   4
-      Top             =   4200
+      Top             =   4250
       Width           =   1695
    End
    Begin VB.Image NoButton 
       Appearance      =   0  'Flat
       Height          =   495
-      Left            =   6720
+      Left            =   2040
       Top             =   4200
       Width           =   1815
    End
    Begin VB.Image YesButton 
       Appearance      =   0  'Flat
       Height          =   495
-      Left            =   4440
+      Left            =   120
       Top             =   4200
       Width           =   1815
    End
@@ -201,6 +209,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+Private Sub EnableSort_Click()
+If EnableSort.Value = 1 Then
+MundialesSort = True
+EnableSort.Caption = ConstStr(55)
+Else
+MundialesSort = False
+EnableSort.Caption = ConstStr(56)
+End If
+End Sub
+
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub Form_Load()
 'load GUI
 Me.Caption = ConstStr(0) & " " & ConstStr(27)
@@ -226,9 +248,9 @@ enUS.BackColor = RGB(250, 228, 192)
 esES.BackColor = RGB(250, 228, 192)
 YesLabel.Caption = ConstStr(30)
 NoLabel.Caption = ConstStr(8)
-YesButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
-NoButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
-UpdateButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
+YesButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
+NoButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
+UpdateButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
 EnableSFX.Font.Name = "DinkieBitmap 9pxDemo"
 EnableMusic.Font.Name = "DinkieBitmap 9pxDemo"
 EnablePreload.Font.Name = "DinkieBitmap 9pxDemo"
@@ -262,6 +284,16 @@ Combo2.Font.Name = "DinkieBitmap 9pxDemo"
 UpdateLabel.ForeColor = RGB(89, 15, 16)
 UpdateLabel.Font.Name = "DinkieBitmap 9pxDemo"
 UpdateLabel.Caption = ConstStr(48)
+EnableSort.Font.Name = "DinkieBitmap 9pxDemo"
+EnableSort.BackColor = RGB(250, 228, 192)
+EnableSort.ForeColor = RGB(89, 15, 16)
+If MundialesSort Then
+EnableSort.Value = 1
+EnableSort.Caption = ConstStr(55)
+Else
+EnableSort.Value = 0
+EnableSort.Caption = ConstStr(56)
+End If
 'load Locale
 If Locale = "zh-cn" Then
 zhCN.Value = True
@@ -450,6 +482,13 @@ DownloadMethod = 1
 Print #2, "1"
 Else
 DownloadMethod = 0
+Print #2, "0"
+End If
+If EnableSort.Value = True Then
+MundialesSort = True
+Print #2, "1"
+Else
+MundialesSort = False
 Print #2, "0"
 End If
 Close #2

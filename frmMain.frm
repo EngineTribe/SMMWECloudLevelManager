@@ -9,7 +9,7 @@ Begin VB.Form frmMain
    ClientWidth     =   17400
    BeginProperty Font 
       Name            =   "宋体"
-      Size            =   15
+      Size            =   36
       Charset         =   134
       Weight          =   400
       Underline       =   0   'False
@@ -34,15 +34,6 @@ Begin VB.Form frmMain
    End
    Begin VB.TextBox SearchText 
       Appearance      =   0  'Flat
-      BeginProperty Font 
-         Name            =   "宋体"
-         Size            =   36
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   750
       IMEMode         =   3  'DISABLE
       Left            =   4200
@@ -53,15 +44,6 @@ Begin VB.Form frmMain
    Begin VB.TextBox PageNumTxt 
       Alignment       =   2  'Center
       Appearance      =   0  'Flat
-      BeginProperty Font 
-         Name            =   "宋体"
-         Size            =   36
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   615
       IMEMode         =   2  'OFF
       Left            =   13320
@@ -72,36 +54,18 @@ Begin VB.Form frmMain
    End
    Begin VB.ListBox ListOL 
       Appearance      =   0  'Flat
-      BeginProperty Font 
-         Name            =   "宋体"
-         Size            =   30
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   7230
       Left            =   1920
       TabIndex        =   5
-      Top             =   2160
+      Top             =   2040
       Width           =   13575
    End
    Begin VB.ListBox ListLocal 
       Appearance      =   0  'Flat
-      BeginProperty Font 
-         Name            =   "宋体"
-         Size            =   30
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   7230
       Left            =   1920
       TabIndex        =   1
-      Top             =   1560
+      Top             =   1680
       Width           =   13575
    End
    Begin VB.Image SettingsButton 
@@ -149,15 +113,6 @@ Begin VB.Form frmMain
       BackColor       =   &H80000005&
       BackStyle       =   0  'Transparent
       Caption         =   "0"
-      BeginProperty Font 
-         Name            =   "宋体"
-         Size            =   36
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   975
       Left            =   12960
@@ -361,15 +316,6 @@ Begin VB.Form frmMain
       BackColor       =   &H80000005&
       BackStyle       =   0  'Transparent
       Caption         =   "Counter"
-      BeginProperty Font 
-         Name            =   "宋体"
-         Size            =   36
-         Charset         =   134
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       ForeColor       =   &H80000008&
       Height          =   975
       Left            =   13800
@@ -402,17 +348,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub Form_Load()
-InternalVersion = "5.2"
-AppVersion = "5.2"
+InternalVersion = "5.3"
+AppVersion = "5.3"
 LoadConfig
 'Load Mirrorlist
-Open App.path & "\Assets\mirrorlist.txt" For Input As #8
+Open App.Path & "\Assets\mirrorlist.txt" For Input As #8
     MirrorTmp = ""
     MirrorTmp2 = ""
     Do While Not EOF(8)
     Line Input #8, MirrorTmp2
-    If left(MirrorTmp2, 1) <> "'" Then
+    If Left(MirrorTmp2, 1) <> "'" Then
     MirrorTmp = MirrorTmp & MirrorTmp2 & vbCrLf
     End If
     Loop
@@ -429,7 +378,7 @@ Open App.path & "\Assets\mirrorlist.txt" For Input As #8
 Close #8
 
 'Load Locale
-Open App.path & "\Locale\" & Locale & ".lang" For Input As #1
+Open App.Path & "\Locale\" & Locale & ".lang" For Input As #1
     LocaleTmp = ""
     LocaleTmp2 = ""
     Do While Not EOF(1)
@@ -440,7 +389,7 @@ Open App.path & "\Locale\" & Locale & ".lang" For Input As #1
     ReDim Preserve ConstStr(UBound(ConstStr) + 1)
 Close #1
 'Load Locale
-Open App.path & "\Locale\label-" & Locale & ".lang" For Input As #6
+Open App.Path & "\Locale\label-" & Locale & ".lang" For Input As #6
     LocaleTmp = ""
     LocaleTmp2 = ""
     Do While Not EOF(6)
@@ -470,8 +419,8 @@ If IsSFXEnable Or IsBGMEnable Then
     Mix_Init '0                                   'Init SDL Mixer itself
     Mix_OpenAudio 44100, AUDIO_S16LSB, 2, 2048   'Init Open audio stream
 End If
-MainMenuButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-mainmenu.png")
-ImportButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-import.png")
+MainMenuButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-mainmenu.png")
+ImportButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-import.png")
 MainMenuBG.Visible = False
 PageNumTxt.Visible = False
 SearchText.Visible = False
@@ -480,6 +429,7 @@ LocalLevels
 End Sub
 
 Private Sub Form_Terminate()
+On Error Resume Next
 'Stop SDLMixerX and the process
 If IsSFXEnable Or IsBGMEnable Then
     Mix_CloseAudio
@@ -487,12 +437,14 @@ If IsSFXEnable Or IsBGMEnable Then
     SDL_Quit
     End If
     Call RemoveFontResourceEx(ConfigFolder & "\Assets\DinkieBitmap-9pxDemoMod.ttf", FR_PRIVATE, 0)
-    Call RemoveFontResourceEx(App.path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
+    Call RemoveFontResourceEx(App.Path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
+    End
     Shell "taskkill /f /im SMMWECloudLevelMgr.exe", vbMinimizedNoFocus
 
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+On Error Resume Next
 'Stop SDLMixerX and the process
 If IsSFXEnable Or IsBGMEnable Then
     Mix_CloseAudio
@@ -500,7 +452,8 @@ If IsSFXEnable Or IsBGMEnable Then
     SDL_Quit
     End If
     Call RemoveFontResourceEx(ConfigFolder & "\Assets\DinkieBitmap-9pxDemoMod.ttf", FR_PRIVATE, 0)
-    Call RemoveFontResourceEx(App.path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
+    Call RemoveFontResourceEx(App.Path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
+    End
     Shell "taskkill /f /im SMMWECloudLevelMgr.exe", vbMinimizedNoFocus
 End Sub
 Public Sub LocalLevels()
@@ -530,7 +483,7 @@ LocalButton.Visible = False
 ListOL.Visible = False
 ImportButton.Visible = True
 DoEvents
-frmMain.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\frmbg-locallevels.png")
+frmMain.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\frmbg-locallevels.png")
 frmMain.Caption = ConstStr(0) & " " & AppVersion & " - " & ConstStr(1)
 PlayMusic ("snd_guardabot.ogg")
 Dim fname As String
@@ -550,7 +503,7 @@ LevelCounterLocal.Font.Name = "AsepriteFont"
 LevelCounterLocal.Caption = CStr(ListLocal.ListCount) & "/60"
 ListLocal.Font.Name = "AsepriteFont"
 ListLocal.ForeColor = RGB(89, 15, 16)
-TitleLocal.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-coursebot.png")
+TitleLocal.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\dec-coursebot.png")
 TitleLabelLocal.Caption = ConstStr(1)
 TitleLabelLocal.ForeColor = RGB(250, 228, 192)
 TitleLabelLocal.Font.Name = "DinkieBitmap 9pxDemo"
@@ -581,7 +534,6 @@ IsLoading = True
 'Load online levels
 On Error Resume Next
 OperateType = 2
-ListOL.Font.Name = "DinkieBitmap 9pxDemo"
 ListOL.AddItem ""
 ListOL.AddItem ConstStr(15)
 DoEvents
@@ -606,15 +558,15 @@ PageBtn.Visible = True
 ListOL.Font.Name = "AsepriteFont"
 ListOL.ForeColor = RGB(89, 15, 16)
 ListOL.BackColor = RGB(254, 252, 238)
-OLCastle.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-smmwecloud-castle.png")
-MundialesBG.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\frmbg-smmwecloud-fg.png")
-frmMain.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\frmbg-smmwecloud.png")
-OLTag1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag2.png")
-OLTag2.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag1.png")
-OLTag3.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tagstar.png")
-PageBtnL.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-pagesl.png")
-PageBtnR.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-pagesr.png")
-PageBtn.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-pages.png")
+OLCastle.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\dec-smmwecloud-castle.png")
+MundialesBG.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\frmbg-smmwecloud-fg.png")
+frmMain.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\frmbg-smmwecloud.png")
+OLTag1.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag2.png")
+OLTag2.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag1.png")
+OLTag3.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tagstar.png")
+PageBtnL.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-pagesl.png")
+PageBtnR.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-pagesr.png")
+PageBtn.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\dec-pages.png")
 OLTagLabel1.Font.Name = "DinkieBitmap 9pxDemo"
 OLTagLabel2.ForeColor = RGB(0, 135, 134)
 OLTagLabel1.ForeColor = RGB(137, 229, 232)
@@ -630,7 +582,11 @@ PlayMusic ("snd_niveles_mundiales.ogg")
 'Get Level list
 PageNum = 1
 Dim OLLevelList, OLLevelList2() As String
-OLLevelList = PostDataSWE(OLWebIP & "main?filename", "pagenum=" & CStr(PageNum))
+If MundialesSort Then
+OLLevelList = PostDataSWE(OLWebIP & "main?apiv3-filename-time", "pagenum=" & CStr(PageNum))
+Else
+OLLevelList = PostDataSWE(OLWebIP & "main?apiv3-filename", "pagenum=" & CStr(PageNum))
+End If
 OLLevelList2 = Split(OLLevelList, vbLf)
 ReDim Preserve OLLevelList2(UBound(OLLevelList2))
 ListOL.Clear
@@ -645,12 +601,15 @@ Public Sub SMMWECloudRefresh()
 On Error GoTo ErrHandler1
 IsLoading = True
 ListOL.Clear
-ListOL.Font.Name = "DinkieBitmap 9pxDemo"
 ListOL.AddItem ""
 ListOL.AddItem ConstStr(15)
 DoEvents
 Dim OLLevelList, OLLevelList2() As String
-OLLevelList = PostDataSWE(OLWebIP & "main?filename", "pagenum=" & CStr(PageNum))
+If MundialesSort Then
+OLLevelList = PostDataSWE(OLWebIP & "main?apiv3-filename-time", "pagenum=" & CStr(PageNum))
+Else
+OLLevelList = PostDataSWE(OLWebIP & "main?apiv3-filename", "pagenum=" & CStr(PageNum))
+End If
 OLLevelList2 = Split(OLLevelList, vbLf)
 ReDim Preserve OLLevelList2(UBound(OLLevelList2))
 ListOL.Clear
@@ -692,8 +651,8 @@ PageBtn.Visible = True
 ListOL.Visible = True
 SearchText.Visible = False
 SearchLabel.Visible = False
-OLTag1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag2.png")
-OLTag2.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag1.png")
+OLTag1.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag2.png")
+OLTag2.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag1.png")
 OLTagLabel2.ForeColor = RGB(0, 135, 134)
 OLTagLabel1.ForeColor = RGB(137, 229, 232)
 If IsSearching Then
@@ -716,8 +675,8 @@ SearchLabel.ForeColor = RGB(255, 255, 255)
 SearchText.ForeColor = RGB(89, 15, 16)
 SearchLabel.Font.Name = "DinkieBitmap 9pxDemo"
 SearchText.Font.Name = "AsepriteFont"
-OLTag1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag1.png")
-OLTag2.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag2.png")
+OLTag1.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag1.png")
+OLTag2.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag2.png")
 OLTagLabel1.ForeColor = RGB(0, 135, 134)
 OLTagLabel2.ForeColor = RGB(137, 229, 232)
 End Sub
@@ -733,9 +692,9 @@ CommonDialog1.DialogTitle = ConstStr(13)
 CommonDialog1.InitDir = DesktopFolder
 CommonDialog1.Filter = "SMMWE Level|*.swe"
 CommonDialog1.ShowOpen
-filename_select = CommonDialog1.filename
-filename_select = right(filename_select, Len(filename_select) - InStrRev(filename_select, "\"))
-FileCopy CommonDialog1.filename, LevelFolder & "\" & filename_select
+filename_select = CommonDialog1.FileName
+filename_select = Right(filename_select, Len(filename_select) - InStrRev(filename_select, "\"))
+FileCopy CommonDialog1.FileName, LevelFolder & "\" & filename_select
 Exit1:
 LocalLevelsRefresh
 End Sub
@@ -801,10 +760,10 @@ ListLocal.Visible = False
 ImportButton.Visible = False
 ListOL.Visible = False
 SearchText.Visible = False
-MainMenuBG.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\menu-" & LocaleSuffix & ".png")
+MainMenuBG.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\menu-" & LocaleSuffix & ".png")
 MainMenuBG.Visible = True
-LocalButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-coursebot.png")
-MundialesButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-smmwecloud.png")
+LocalButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-coursebot.png")
+MundialesButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-smmwecloud.png")
 LocalButton.Visible = True
 LocalLabel.Visible = True
 MundialesButton.Visible = True
@@ -823,8 +782,8 @@ AboutButton.ZOrder
 SettingsButton.ZOrder
 AboutButton.ToolTipText = ConstStr(28)
 SettingsButton.ToolTipText = ConstStr(27)
-AboutButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-about.png")
-SettingsButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-settings.png")
+AboutButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-about.png")
+SettingsButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-settings.png")
 End If
 End Sub
 
@@ -960,8 +919,8 @@ SearchLabel.ForeColor = RGB(255, 255, 255)
 SearchText.ForeColor = RGB(89, 15, 16)
 SearchLabel.Font.Name = "DinkieBitmap 9pxDemo"
 SearchText.Font.Name = "AsepriteFont"
-OLTag1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag1.png")
-OLTag2.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-tag2.png")
+OLTag1.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag1.png")
+OLTag2.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-tag2.png")
 OLTagLabel1.ForeColor = RGB(0, 135, 134)
 OLTagLabel2.ForeColor = RGB(137, 229, 232)
 ShowMsgBox "SEARCHERR"
@@ -1014,36 +973,42 @@ On Error GoTo ConfigErr
 'Load Config
 Open ConfigFolder & "\MainConfig.txt" For Input As #3
 Line Input #3, Locale
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
+Line Input #3, configtmp
+If configtmp = "1" Then
 IsSFXEnable = True
 Else
 IsSFXEnable = False
 End If
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
+Line Input #3, configtmp
+If configtmp = "1" Then
 IsBGMEnable = True
 Else
 IsBGMEnable = False
 End If
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
+Line Input #3, configtmp
+If configtmp = "1" Then
 IsPreloadEnable = True
 Else
 IsPreloadEnable = False
 End If
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
+Line Input #3, configtmp
+If configtmp = "1" Then
 ProxyDlSuffix = "?proxied"
 Else
 ProxyDlSuffix = ""
 End If
 Line Input #3, UseMirror
-Line Input #3, ConfigTmp
-If ConfigTmp = 1 Then
+Line Input #3, configtmp
+If configtmp = "1" Then
 DownloadMethod = 1
 Else
 DownloadMethod = 0
+End If
+Line Input #3, configtmp
+If configtmp = "1" Then
+MundialesSort = True
+Else
+MundialesSort = False
 End If
 Close #3
 Exit Sub
@@ -1059,6 +1024,6 @@ If IsSFXEnable Or IsBGMEnable Then
     SDL_Quit
     End If
     Call RemoveFontResourceEx(ConfigFolder & "\Assets\DinkieBitmap-9pxDemoMod.ttf", FR_PRIVATE, 0)
-    Call RemoveFontResourceEx(App.path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
+    Call RemoveFontResourceEx(App.Path & "\Assets\AsepriteFont.ttf", FR_PRIVATE, 1)
     Shell "taskkill /f /im SMMWECloudLevelMgr.exe", vbMinimizedNoFocus
 End Sub

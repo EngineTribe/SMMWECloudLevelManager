@@ -1,11 +1,12 @@
-' SMMWE Cloud Mirrorlist Version 5.1
+' SMMWE Cloud Mirrorlist Version 5.3
+' API v3
 '
 ' ---------------------------------
 '
 [Default]
 Name=д╛хо,Default,Defecto
 Base=https://cloud.smmwe.ml/
-API=https://apiv2.smmwe.ml/
+API=https://api.smmwe.ml/
 '
 [NoCNAME]
 Name=д╛хо (нч CNAME), Default (No CNAME),Defecto (Sin CNAME)

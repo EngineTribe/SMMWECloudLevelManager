@@ -21,7 +21,9 @@ Public IsLoading As Boolean
 Public IsSearching As Boolean
 Public DownloadMethod As Integer
 Public UseMirror As String
+Public MundialesSort As Boolean
 Public MirrorlistTmp() As String
+Public Declare Function InitCommonControls Lib "Comctl32.dll" () As Long
 Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal Cx As Long, ByVal Cy As Long, ByVal wFlags As Long) As Long
 Public Declare Function dcWaitForSingleObject Lib "kernel32" Alias "WaitForSingleObject" (ByVal hHandle As Long, ByVal dwMilliseconds As Long) As Long
 Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
@@ -37,14 +39,14 @@ Public Sub ShowMsgBox(MsgType As String)
 MsgBoxType = MsgType
 frmMsgBox.Show
 frmMsgBox.Top = frmMain.Top + 8500
-frmMsgBox.left = frmMain.left + 12000
+frmMsgBox.Left = frmMain.Left + 12000
 End Sub
 Public Sub PlayMusic(MusicFileName As String)
 If IsBGMEnable Then
     'Load Music
     Mix_HaltMusic                       'Stop previous
     Mix_FreeMusic music
-    music = Mix_LoadMUS(App.path & "\Assets\" & MusicFileName) 'Open new music
+    music = Mix_LoadMUS(App.Path & "\Assets\" & MusicFileName) 'Open new music
     'Starting of music playback
     Mix_PlayMusic music, -1
     End If
@@ -52,7 +54,7 @@ End Sub
 Public Sub PlaySFX(MusicFileName As String)
 If IsSFXEnable Then
     'Load Music
-    sfx = Mix_LoadWAV(App.path & "\Assets\" & MusicFileName)
+    sfx = Mix_LoadWAV(App.Path & "\Assets\" & MusicFileName)
     'Starting of music playback
     Mix_PlayChannel -1, sfx, 0
     End If

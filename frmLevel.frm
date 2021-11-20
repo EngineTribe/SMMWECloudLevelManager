@@ -289,13 +289,15 @@ End Sub
 Private Sub ExportLabel_Click()
 ExportButton_Click
 End Sub
-
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub Form_Load()
 On Error Resume Next
-frmLevel.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\frmbg-aboutlevel.png")
-Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-exit-aboutlevel.png")
+frmLevel.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\frmbg-aboutlevel.png")
+Image1.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-exit-aboutlevel.png")
 LevelName.Font.Name = "AsepriteFont"
-LevelName.Caption = right(frmMain.ListLocal.Text, Len(frmMain.ListLocal.Text) - 1)
+LevelName.Caption = Right(frmMain.ListLocal.Text, Len(frmMain.ListLocal.Text) - 1)
 
     Dim levelcontent As String
     Open LevelFolder & "\" & LevelName.Caption & ".swe" For Input As #5
@@ -313,27 +315,27 @@ LevelName.Caption = right(frmMain.ListLocal.Text, Len(frmMain.ListLocal.Text) - 
     Dim GameStyle As String
     GameStyle = Replace(Join(Filter(levelcontent2, Chr(34) & "apariencia" & Chr(34)), ""), Chr(34) & "apariencia" & Chr(34) & ": ", "")
     GameStyle = Replace(GameStyle, " } ]", "")
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-unknown.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-unknown.png")
     If GameStyle = " 0" Then
     GameStyle = "SMB1"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-smb1.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-smb1.png")
     ElseIf GameStyle = " 1" Then
     GameStyle = "SMB3"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-smb3.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-smb3.png")
     ElseIf GameStyle = " 2" Then
     GameStyle = "SMW"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-smw.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-smw.png")
     ElseIf GameStyle = " 3" Then
     GameStyle = "NSMBU"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-nsmbu.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-nsmbu.png")
     End If
     Dim GameLabel1, GameLabel2, LocaleSuffixTmp As String
     LocaleSuffixTmp = "es-es"
     If Locale = "en-us" Then LocaleSuffixTmp = "en-us"
-    lvlImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\tags-" & CStr(Int((8 - 0 + 1) * Rnd + 0)) & "-" & LocaleSuffixTmp & ".png")
+    lvlImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\tags-" & CStr(Int((8 - 0 + 1) * Rnd + 0)) & "-" & LocaleSuffixTmp & ".png")
     GameLabel1 = Replace(Join(Filter(levelcontent2, Chr(34) & "etiqueta1" & Chr(34)), ""), Chr(34) & "etiqueta1" & Chr(34) & ": ", "")
     GameLabel2 = Replace(Join(Filter(levelcontent2, Chr(34) & "etiqueta2" & Chr(34)), ""), Chr(34) & "etiqueta2" & Chr(34) & ": ", "")
-    If CheckFileExists(App.path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png") Then lvlImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png")
+    If CheckFileExists(App.Path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png") Then lvlImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png")
     If GameLabel1 = " -1" Then
     GameLabel1 = "---"
     Else
@@ -355,14 +357,14 @@ LevelName.Caption = right(frmMain.ListLocal.Text, Len(frmMain.ListLocal.Text) - 
     IsDayNight = Replace(Join(Filter(levelcontent2, Chr(34) & "modo_noche" & Chr(34)), ""), Chr(34) & "modo_noche" & Chr(34) & ": ", "")
     If IsDayNight = " 0" Then
     IsDayNight = GameLabel(27)
-    DayNightImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\lvl-day.png")
+    DayNightImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\lvl-day.png")
     ElseIf IsDayNight = " 1" Then
     IsDayNight = GameLabel(28)
-    DayNightImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\lvl-night.png")
+    DayNightImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\lvl-night.png")
     End If
     StageStyle = Replace(Join(Filter(levelcontent2, Chr(34) & "entorno" & Chr(34)), ""), Chr(34) & "entorno" & Chr(34) & ": ", "")
     StageStyle = Replace(StageStyle, Chr(34), "")
-    LvlStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\stage-" & Replace(StageStyle, " ", "") & ".png")
+    LvlStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\stage-" & Replace(StageStyle, " ", "") & ".png")
     If StageStyle = " ground" Then
     StageStyle = GameLabel(16)
     ElseIf StageStyle = " underground" Then
@@ -421,9 +423,9 @@ RenameLabel.ForeColor = RGB(29, 42, 67)
     ExportLabel.Caption = ConstStr(11)
 ExportLabel.ForeColor = RGB(29, 42, 67)
    ExportLabel.Font.Name = "DinkieBitmap 9pxDemo"
-    RenameButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-rename.png")
-    DeleteButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-delete.png")
-    ExportButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-export.png")
+    RenameButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-rename.png")
+    DeleteButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-delete.png")
+    ExportButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-export.png")
     LvlStyleImg.ToolTipText = StageStyle & " " & IsDayNight
     DayNightImg.ToolTipText = StageStyle & " " & IsDayNight
     GameStyleImg.ToolTipText = GameStyle
@@ -432,7 +434,7 @@ ExportLabel.ForeColor = RGB(29, 42, 67)
     UploadLabel.Caption = ConstStr(37)
 UploadLabel.ForeColor = RGB(29, 42, 67)
    UploadLabel.Font.Name = "DinkieBitmap 9pxDemo"
-    UploadButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-upload.png")
+    UploadButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-upload.png")
 End Sub
 
 
@@ -452,13 +454,13 @@ Private Sub ExportButton_Click()
 On Error GoTo Exit2
 PlaySFX "snd_aceptar.ogg"
 Dim filename_select As String
-CommonDialog1.filename = frmLevel.LevelName.Caption & ".swe"
+CommonDialog1.FileName = frmLevel.LevelName.Caption & ".swe"
 CommonDialog1.DialogTitle = ConstStr(12)
 CommonDialog1.InitDir = DesktopFolder
 CommonDialog1.Filter = "SMMWE Level|*.swe"
 CommonDialog1.ShowSave
-filename_select = CommonDialog1.filename
-FileCopy LevelFolder & "\" & frmLevel.LevelName.Caption & ".swe", CommonDialog1.filename
+filename_select = CommonDialog1.FileName
+FileCopy LevelFolder & "\" & frmLevel.LevelName.Caption & ".swe", CommonDialog1.FileName
 Exit2:
 End Sub
 

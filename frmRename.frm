@@ -96,6 +96,9 @@ Attribute VB_Exposed = False
 Private Const a& = -1
 Private Const b& = &H1
 Private Const c& = &H2
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub Form_Load()
 SetWindowPos Me.hWnd, a, 0, 0, 0, 0, b Or c
 frmRename.BackColor = RGB(250, 228, 192)
@@ -109,8 +112,8 @@ Label1.Caption = ConstStr(9)
 Label1.ForeColor = RGB(89, 15, 16)
 Label2.ForeColor = RGB(89, 15, 16)
 Label3.ForeColor = RGB(89, 15, 16)
-YesButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
-NoButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
+YesButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
+NoButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
 
 Text1.ForeColor = RGB(89, 15, 16)
 Text1.Font.Name = "DinkieBitmap 9pxDemo"

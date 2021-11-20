@@ -174,7 +174,9 @@ End Sub
 Private Sub CommentLabel_Click()
 CommentButton_Click
 End Sub
-
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub CopyLinkButton_Click()
 PlaySFX "snd_aceptar.ogg"
 Clipboard.SetText Me.LevelNameLabel.Caption & vbCrLf & "https://smmwe-cloud.vercel.app/main/" & Replace(frmLevelOL.LevelNameLabel.Caption, " ", "%20") & ".swe"
@@ -219,13 +221,13 @@ End Sub
 Private Sub Form_Load()
 If OperateType = 2 And frmMain.ListOL.Text <> "" Then
 Me.BackColor = RGB(254, 252, 238)
-Image1.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-exit-aboutlevel.png")
-GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-unknown.png")
+Image1.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-exit-aboutlevel.png")
+GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-unknown.png")
 LevelNameLabel.ForeColor = RGB(89, 15, 16)
-LevelNameLabel.Caption = right(frmMain.ListOL.Text, Len(frmMain.ListOL.Text) - 1)
+LevelNameLabel.Caption = Right(frmMain.ListOL.Text, Len(frmMain.ListOL.Text) - 1)
 LevelNameLabel.Font.Name = "AsepriteFont"
-DecLabel.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\dec-oltag.png")
-CopyLinkButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-copylink.png")
+DecLabel.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\dec-oltag.png")
+CopyLinkButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-copylink.png")
 'Load Default cfg
 lvlTag.ForeColor = RGB(89, 15, 16)
 lvlTag.Font.Name = "DinkieBitmap 9pxDemo"
@@ -236,9 +238,9 @@ lvlInfos.Caption = ConstStr(19)
 Dim LocaleSuffixTmp As String
 LocaleSuffixTmp = "es-es"
 If Locale = "en-us" Then LocaleSuffixTmp = "en-us"
-lvlImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\tags-0-" & LocaleSuffixTmp & ".png")
-DownloadButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-jugar.png")
-CommentButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-jugar.png")
+lvlImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\tags-0-" & LocaleSuffixTmp & ".png")
+DownloadButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-jugar.png")
+CommentButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-jugar.png")
 CommentLabel.Caption = ConstStr(20)
 DownloadLabel.Caption = ConstStr(21)
 CommentLabel.Font.Name = "DinkieBitmap 9pxDemo"
@@ -275,16 +277,16 @@ levelcontent = Base64Decode(levelcontent)
     GameStyle = Replace(GameStyle, " } ]", "")
     If GameStyle = " 0" Then
     GameStyle = "SMB1"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-smb1.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-smb1.png")
     ElseIf GameStyle = " 1" Then
     GameStyle = "SMB3"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-smb3.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-smb3.png")
     ElseIf GameStyle = " 2" Then
     GameStyle = "SMW"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-smw.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-smw.png")
     ElseIf GameStyle = " 3" Then
     GameStyle = "NSMBU"
-    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\gamestyle-nsmbu.png")
+    GameStyleImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\gamestyle-nsmbu.png")
     End If
     lvlInfos.Caption = lvlInfos.Caption & vbCrLf & GameStyle
     DoEvents
@@ -329,8 +331,8 @@ levelcontent = Base64Decode(levelcontent)
     DoEvents
     GameLabel1 = Replace(Join(Filter(levelcontent2, Chr(34) & "etiqueta1" & Chr(34)), ""), Chr(34) & "etiqueta1" & Chr(34) & ": ", "")
     GameLabel2 = Replace(Join(Filter(levelcontent2, Chr(34) & "etiqueta2" & Chr(34)), ""), Chr(34) & "etiqueta2" & Chr(34) & ": ", "")
-    lvlImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\tags-" & CStr(Int((8 - 0 + 1) * Rnd + 0)) & "-" & LocaleSuffixTmp & ".png")
-    If CheckFileExists(App.path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png") Then lvlImg.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png")
+    lvlImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\tags-" & CStr(Int((8 - 0 + 1) * Rnd + 0)) & "-" & LocaleSuffixTmp & ".png")
+    If CheckFileExists(App.Path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png") Then lvlImg.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\tags-" & Replace(CStr(GameLabel1), " ", "") & "-" & LocaleSuffixTmp & ".png")
     If GameLabel1 = " -1" Then
     GameLabel1 = "---"
     Else

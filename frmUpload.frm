@@ -136,7 +136,9 @@ Private Sub CustomNameText_Click()
 If CustomNameText.Text = ConstStr(40) Then CustomNameText.Text = ""
 OpCustomName.Value = True
 End Sub
-
+Private Sub Form_Initialize()
+InitCommonControls
+End Sub
 Private Sub Form_Load()
 Me.BackColor = RGB(250, 228, 192)
 Me.Caption = ConstStr(38)
@@ -156,7 +158,7 @@ OpWithMaker.Value = False
 If frmLevel.LevelMakerLabel.Caption = ConstStr(3) Then
 WithMakerLabel.Caption = NoCHS(frmLevel.LevelName.Caption & " (Offline)")
 Else
-WithMakerLabel.Caption = NoCHS(frmLevel.LevelName.Caption & " By " & right(frmLevel.LevelMakerLabel.Caption, Len(frmLevel.LevelMakerLabel.Caption) - 1))
+WithMakerLabel.Caption = NoCHS(frmLevel.LevelName.Caption & " By " & Right(frmLevel.LevelMakerLabel.Caption, Len(frmLevel.LevelMakerLabel.Caption) - 1))
 End If
 OpCustomName.BackColor = RGB(250, 228, 192)
 OpCustomName.Value = False
@@ -169,8 +171,8 @@ YesLabel.ForeColor = RGB(89, 15, 16)
 YesLabel.Font.Name = "DinkieBitmap 9pxDemo"
 NoLabel.ForeColor = RGB(89, 15, 16)
 NoLabel.Font.Name = "DinkieBitmap 9pxDemo"
-NoButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
-YesButton.Picture = StdPictureEx.LoadPicture(App.path & "\Assets\btn-blank.png")
+NoButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
+YesButton.Picture = StdPictureEx.LoadPicture(App.Path & "\Assets\btn-blank.png")
 End Sub
 
 Private Function NoCHS(ByVal FilterString As String) As String
